@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Child Growth - CCHIS</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-brand"><i class="fas fa-heartbeat"></i> CCHIS</div>
+        </div>
+        <div class="sidebar-menu">
+            <a href="doctor-dashboard.html" class="menu-item">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+            <a href="profiles.html" class="menu-item">
+                <i class="fas fa-users"></i> Profiles
+            </a>
+            <a href="postpartum.html" class="menu-item">
+                <i class="fas fa-procedures"></i> Postpartum
+            </a>
+            <a href="growth.html" class="menu-item active">
+                <i class="fas fa-baby"></i> Child Growth
+            </a>
+            <a href="reports.html" class="menu-item">
+                <i class="fas fa-chart-bar"></i> Reports
+            </a>
+            <a href="appointment-requests.html" class="menu-item">
+                <i class="fas fa-calendar-check"></i> Appointments
+            </a>
+            <a href="index.html" class="menu-item"
+                style="margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="top-bar">
+            <h2>Child Growth & Development</h2>
+            <div class="user-profile">
+                <div class="notification-bell" style="margin-right: 1.5rem; position: relative; cursor: pointer;">
+                    <i class="fas fa-bell" style="font-size: 1.2rem; color: var(--text-muted);"></i>
+                    <span class="badge"
+                        style="position: absolute; top: -5px; right: -5px; background: var(--danger-color); color: white; border-radius: 50%; padding: 2px 5px; font-size: 0.7rem;">5</span>
+                </div>
+                <div class="user-avatar">MC</div>
+                <div>
+                    <div style="font-weight: 600;">Dr. Maria Clara</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted);">Midwife</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Child Selector (Mock) -->
+        <div class="card mb-3 animate-slide-up delay-100">
+            <div class="d-flex align-center justify-between">
+                <div class="d-flex align-center">
+                    <div
+                        style="width: 50px; height: 50px; background: #eee; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                        <i class="fas fa-baby" style="font-size: 1.5rem; color: #666;"></i>
+                    </div>
+                    <div>
+                        <h3 style="margin: 0;">Juan Santos</h3>
+                        <p class="text-muted" style="margin: 0;">3 months old • Male</p>
+                    </div>
+                </div>
+                <button class="btn btn-outline">Change Child</button>
+            </div>
+        </div>
+
+        <div class="d-flex" style="gap: 1.5rem; flex-wrap: wrap;">
+            <!-- Growth Charts Section -->
+            <div style="flex: 2; min-width: 400px;" class="animate-slide-up delay-200">
+                <div class="card">
+                    <div class="card-header">Growth Charts</div>
+                    <div class="tabs mb-2">
+                        <button class="tab-btn active" onclick="switchTab('t-weight', 'c-weight')"
+                            id="t-weight">Weight-for-Age</button>
+                        <button class="tab-btn" onclick="switchTab('t-height', 'c-height')"
+                            id="t-height">Length-for-Age</button>
+                    </div>
+
+                    <div id="c-weight" class="tab-content active">
+                        <canvas id="weightChart"></canvas>
+                    </div>
+                    <div id="c-height" class="tab-content">
+                        <canvas id="heightChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Immunization Schedule -->
+                <div class="card">
+                    <div class="card-header">Immunization Schedule</div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Vaccine</th>
+                                    <th>Age Due</th>
+                                    <th>Date Given</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="imm-table-body">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Side Panel: Milestones & Alerts -->
+            <div style="flex: 1; min-width: 300px;" class="animate-slide-up delay-300">
+                <!-- Alerts -->
+                <div class="card bg-warning"
+                    style="background-color: rgba(255, 193, 7, 0.1); border: 1px solid var(--warning-color);">
+                    <div class="card-header" style="border-bottom-color: rgba(0,0,0,0.05);">Alerts</div>
+                    <ul style="list-style: none;">
+                        <li class="mb-2"><i class="fas fa-exclamation-circle text-danger"></i> Missed: Polio 1 (Overdue)
+                        </li>
+                        <li><i class="fas fa-info-circle text-primary"></i> Upcoming: DPT 2 (Due in 2 weeks)</li>
+                    </ul>
+                </div>
+
+                <!-- Milestones -->
+                <div class="card">
+                    <div class="card-header">Development Milestones</div>
+                    <div class="mb-2"><strong>0-3 Months</strong></div>
+                    <ul style="list-style: none;">
+                        <li class="mb-2">
+                            <label class="d-flex align-center">
+                                <input type="checkbox" checked disabled>
+                                <span style="margin-left: 0.5rem;">Holds head up</span>
+                            </label>
+                        </li>
+                        <li class="mb-2">
+                            <label class="d-flex align-center">
+                                <input type="checkbox" checked disabled>
+                                <span style="margin-left: 0.5rem;">Smiles at people</span>
+                            </label>
+                        </li>
+                        <li class="mb-2">
+                            <label class="d-flex align-center">
+                                <input type="checkbox">
+                                <span style="margin-left: 0.5rem;">Follows objects with eyes</span>
+                            </label>
+                        </li>
+                    </ul>
+
+                    <div class="mb-2 mt-3"><strong>4-6 Months</strong></div>
+                    <ul style="list-style: none;">
+                        <li class="mb-2">
+                            <label class="d-flex align-center">
+                                <input type="checkbox">
+                                <span style="margin-left: 0.5rem;">Rolls over</span>
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
+</body>
+
+</html>

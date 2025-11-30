@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dashboard - CCHIS</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Mother-specific styles */
+        :root {
+            --primary-color: #ff8fa3;
+            /* Softer pink/red */
+            --secondary-color: #fff0f3;
+            --accent-color: #ffccd5;
+        }
+
+        .sidebar {
+            background: linear-gradient(180deg, #ff8fa3 0%, #ff4d6d 100%);
+        }
+
+        .sidebar-menu .menu-item:hover,
+        .sidebar-menu .menu-item.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .card-icon-bg {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-brand"><i class="fas fa-heartbeat"></i> CCHIS</div>
+        </div>
+        <div class="sidebar-menu">
+            <a href="mother-dashboard.html" class="menu-item active">
+                <i class="fas fa-home"></i> My Dashboard
+            </a>
+            <a href="my-profile.html" class="menu-item">
+                <i class="fas fa-user"></i> My Profile
+            </a>
+            <a href="my-child.html" class="menu-item">
+                <i class="fas fa-baby"></i> My Child
+            </a>
+            <a href="my-appointments.html" class="menu-item">
+                <i class="fas fa-calendar-alt"></i> My Appointments
+            </a>
+            <a href="my-records.html" class="menu-item">
+                <i class="fas fa-file-medical"></i> My Records
+            </a>
+            <a href="index.html" class="menu-item"
+                style="margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="top-bar">
+            <h2>My Dashboard</h2>
+            <div class="user-profile">
+                <div class="notification-bell" style="margin-right: 1.5rem; position: relative; cursor: pointer;">
+                    <i class="fas fa-bell" style="font-size: 1.2rem; color: var(--text-muted);"></i>
+                    <span class="badge"
+                        style="position: absolute; top: -5px; right: -5px; background: var(--danger-color); color: white; border-radius: 50%; padding: 2px 5px; font-size: 0.7rem;">2</span>
+                </div>
+                <div class="user-avatar" style="background: var(--primary-color);">EM</div>
+                <div>
+                    <div style="font-weight: 600;">Ella Martinez</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted);">Mother</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Welcome Section -->
+        <div class="card animate-slide-up delay-100 mb-4"
+            style="background: linear-gradient(135deg, #fff0f3 0%, #ffffff 100%); border-left: 5px solid var(--primary-color);">
+            <h3 style="color: #d63384;">Welcome back, Ella!</h3>
+            <p class="text-muted">Here's a quick overview of your health journey.</p>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid mb-4">
+            <div class="stat-card animate-slide-up delay-200">
+                <div class="stat-icon" style="background: #e3f2fd; color: #0d6efd;">
+                    <i class="fas fa-calendar-day"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Next Appointment</h3>
+                    <p class="text-muted" id="my-next-appt">No upcoming appointments</p>
+                </div>
+            </div>
+            <div class="stat-card animate-slide-up delay-300">
+                <div class="stat-icon" style="background: #e6fcf5; color: #0ca678;">
+                    <i class="fas fa-syringe"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Next Vaccine</h3>
+                    <p class="text-muted" id="my-next-vaccine">Due in 2 weeks</p>
+                </div>
+            </div>
+            <div class="stat-card animate-slide-up delay-400">
+                <div class="stat-icon" style="background: #fff9db; color: #f59f00;">
+                    <i class="fas fa-baby-carriage"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Postpartum Status</h3>
+                    <p class="text-muted" id="my-pp-status"><span class="badge bg-normal">Safe</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-container" style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+            <!-- Postpartum Journey -->
+            <div class="card animate-slide-up delay-500">
+                <h3 class="mb-3">My Postpartum Journey</h3>
+                <div class="timeline" style="position: relative; padding-left: 2rem; border-left: 2px solid #eee;">
+                    <div class="timeline-item mb-4" style="position: relative;">
+                        <div
+                            style="position: absolute; left: -2.6rem; background: var(--primary-color); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <h4>48-Hour Visit</h4>
+                        <p class="text-muted mb-1">Completed on Dec 12, 2023</p>
+                        <span class="badge bg-normal">Normal Findings</span>
+                    </div>
+                    <div class="timeline-item mb-4" style="position: relative;">
+                        <div
+                            style="position: absolute; left: -2.6rem; background: #eee; color: #666; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h4>7-Day Visit</h4>
+                        <p class="text-muted mb-1">Due on Dec 19, 2023</p>
+                        <button class="btn btn-sm btn-outline">Schedule Now</button>
+                    </div>
+                    <div class="timeline-item" style="position: relative;">
+                        <div
+                            style="position: absolute; left: -2.6rem; background: #eee; color: #666; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-calendar"></i>
+                        </div>
+                        <h4>6-Week Visit</h4>
+                        <p class="text-muted mb-1">Due on Jan 25, 2024</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card animate-slide-up delay-600">
+                <h3 class="mb-3">Quick Actions</h3>
+                <div class="d-flex flex-column" style="gap: 1rem;">
+                    <a href="my-appointments.html" class="btn btn-primary text-center">
+                        <i class="fas fa-plus-circle mr-2"></i> Request Appointment
+                    </a>
+                    <a href="my-child.html" class="btn btn-outline text-center">
+                        <i class="fas fa-clipboard-list mr-2"></i> View Vaccination Schedule
+                    </a>
+                    <button class="btn btn-outline text-center">
+                        <i class="fas fa-phone mr-2"></i> Contact Health Worker
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
+</body>
+
+</html>

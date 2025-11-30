@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - CCHIS</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-card animate-slide-up">
+            <div class="login-logo animate-float">
+                <i class="fas fa-heartbeat"></i> CCHIS
+                <div style="font-size: 0.9rem; font-weight: normal; color: #666; margin-top: 0.5rem;">Continuity of Care
+                    Health Information System</div>
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group animate-slide-up delay-100">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" class="form-control" placeholder="Enter your username" required>
+                </div>
+
+                <div class="form-group animate-slide-up delay-200">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" class="form-control" placeholder="Enter your password"
+                        required>
+                </div>
+
+                <button type="submit" class="btn btn-primary animate-slide-up delay-300"
+                    style="width: 100%;">Login</button>
+
+                <div class="text-center mt-2 animate-slide-up delay-400">
+                    <a href="#" style="color: var(--primary-color); font-size: 0.9rem;">Create a new account</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const usernameInput = document.getElementById('username').value;
+            const passwordInput = document.getElementById('password').value;
+            const btn = this.querySelector('button');
+            const originalText = btn.innerText;
+
+            // Reset error state
+            btn.innerText = 'Logging in...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                if (usernameInput === "Doc Ron" && passwordInput === "Ninja") {
+                    // Doctor Login
+                    localStorage.setItem('userRole', 'doctor');
+                    localStorage.setItem('userName', 'Dr. Ron');
+                    localStorage.setItem('userId', 'D001');
+                    window.location.href = 'doctor-dashboard.html';
+                } else if (usernameInput === "Ella Martinez" && passwordInput === "crepo") {
+                    // Mother Login
+                    localStorage.setItem('userRole', 'mother');
+                    localStorage.setItem('userName', 'Ella Martinez');
+                    localStorage.setItem('userId', 'M006'); // Assigning a new ID for Ella
+                    window.location.href = 'mother-dashboard.html';
+                } else {
+                    // Invalid Credentials
+                    alert('Invalid username or password');
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }
+            }, 800);
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Postpartum Monitoring - CCHIS</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-brand"><i class="fas fa-heartbeat"></i> CCHIS</div>
+        </div>
+        <div class="sidebar-menu">
+            <a href="doctor-dashboard.html" class="menu-item">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+            <a href="profiles.html" class="menu-item">
+                <i class="fas fa-users"></i> Profiles
+            </a>
+            <a href="postpartum.html" class="menu-item active">
+                <i class="fas fa-procedures"></i> Postpartum
+            </a>
+            <a href="growth.html" class="menu-item">
+                <i class="fas fa-baby"></i> Child Growth
+            </a>
+            <a href="reports.html" class="menu-item">
+                <i class="fas fa-chart-bar"></i> Reports
+            </a>
+            <a href="appointment-requests.html" class="menu-item">
+                <i class="fas fa-calendar-check"></i> Appointments
+            </a>
+            <a href="index.html" class="menu-item"
+                style="margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="top-bar">
+            <h2>Postpartum Monitoring</h2>
+            <div class="user-profile">
+                <div class="notification-bell" style="margin-right: 1.5rem; position: relative; cursor: pointer;">
+                    <i class="fas fa-bell" style="font-size: 1.2rem; color: var(--text-muted);"></i>
+                    <span class="badge"
+                        style="position: absolute; top: -5px; right: -5px; background: var(--danger-color); color: white; border-radius: 50%; padding: 2px 5px; font-size: 0.7rem;">5</span>
+                </div>
+                <div class="user-avatar">MC</div>
+                <div>
+                    <div style="font-weight: 600;">Dr. Maria Clara</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted);">Midwife</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card animate-slide-up delay-100">
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mother</th>
+                            <th>48-hour Visit</th>
+                            <th>7-day Visit</th>
+                            <th>6-week Visit</th>
+                            <th>Risk Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="postpartum-table-body">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Record Visit Modal -->
+    <div id="visit-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Record Postpartum Visit</div>
+                <div class="close-modal">&times;</div>
+            </div>
+            <div class="modal-body">
+                <form id="visit-form">
+                    <div class="form-group">
+                        <label>Mother's Name</label>
+                        <input type="text" id="v-mother-name" class="form-control" readonly
+                            style="background-color: #f9f9f9;">
+                    </div>
+
+                    <div class="d-flex" style="gap: 1rem;">
+                        <div class="form-group" style="flex: 1;">
+                            <label>Date of Visit</label>
+                            <input type="date" class="form-control" required>
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label>Time</label>
+                            <input type="time" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="d-flex" style="gap: 1rem;">
+                        <div class="form-group" style="flex: 1;">
+                            <label>BP (mmHg)</label>
+                            <input type="text" class="form-control" placeholder="120/80">
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label>Temp (°C)</label>
+                            <input type="text" class="form-control" placeholder="36.5">
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label>HR (bpm)</label>
+                            <input type="text" class="form-control" placeholder="80">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Breastfeeding Status</label>
+                        <select class="form-control">
+                            <option>Exclusive Breastfeeding</option>
+                            <option>Mixed Feeding</option>
+                            <option>Formula Feeding</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mental Health Screening (PHQ-9)</label>
+                        <div style="border: 1px solid #eee; padding: 1rem; border-radius: 4px;">
+                            <p style="margin-bottom: 0.5rem; font-size: 0.9rem;">Little interest or pleasure in doing
+                                things?</p>
+                            <div class="d-flex" style="gap: 1rem;">
+                                <label><input type="radio" name="phq1" value="0"> Not at all</label>
+                                <label><input type="radio" name="phq1" value="1"> Several days</label>
+                                <label><input type="radio" name="phq1" value="2"> More than half</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Notes / Symptoms</label>
+                        <textarea class="form-control" rows="3" placeholder="Enter any observations..."></textarea>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Save Visit Record</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
+</body>
+
+</html>

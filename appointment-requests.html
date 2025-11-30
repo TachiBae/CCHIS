@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Requests - CCHIS</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-brand"><i class="fas fa-heartbeat"></i> CCHIS</div>
+        </div>
+        <div class="sidebar-menu">
+            <a href="doctor-dashboard.html" class="menu-item">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+            <a href="profiles.html" class="menu-item">
+                <i class="fas fa-users"></i> Profiles
+            </a>
+            <a href="postpartum.html" class="menu-item">
+                <i class="fas fa-procedures"></i> Postpartum
+            </a>
+            <a href="growth.html" class="menu-item">
+                <i class="fas fa-baby"></i> Child Growth
+            </a>
+            <a href="reports.html" class="menu-item">
+                <i class="fas fa-chart-bar"></i> Reports
+            </a>
+            <a href="appointment-requests.html" class="menu-item active">
+                <i class="fas fa-calendar-check"></i> Appointments
+            </a>
+            <a href="index.html" class="menu-item"
+                style="margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="top-bar">
+            <h2>Appointment Management</h2>
+            <div class="user-profile">
+                <div class="notification-bell" style="margin-right: 1.5rem; position: relative; cursor: pointer;">
+                    <i class="fas fa-bell" style="font-size: 1.2rem; color: var(--text-muted);"></i>
+                    <span class="badge"
+                        style="position: absolute; top: -5px; right: -5px; background: var(--danger-color); color: white; border-radius: 50%; padding: 2px 5px; font-size: 0.7rem;">5</span>
+                </div>
+                <div class="user-avatar">MC</div>
+                <div>
+                    <div style="font-weight: 600;">Dr. Maria Clara</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted);">Healthcare Provider</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card animate-slide-up delay-100">
+            <h3 class="mb-3">Pending Requests</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Patient Name</th>
+                            <th>Requested Date & Time</th>
+                            <th>Reason</th>
+                            <th>Submitted</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pending-appointments-body">
+                        <!-- Populated by JS -->
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">No pending requests</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card animate-slide-up delay-200 mt-4">
+            <h3 class="mb-3">Today's Appointments</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Patient</th>
+                            <th>Reason</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="todays-appointments-body">
+                        <!-- Populated by JS -->
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">No appointments scheduled for today</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
+</body>
+
+</html>
