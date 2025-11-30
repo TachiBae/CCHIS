@@ -5,25 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Records - CCHIS</title>
-    <link rel="stylesheet" href="css/style.css">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* Mother-specific styles */
-        :root {
-            --primary-color: #ff8fa3;
-            --secondary-color: #fff0f3;
-            --accent-color: #ffccd5;
-        }
-
-        .sidebar {
-            background: linear-gradient(180deg, #ff8fa3 0%, #ff4d6d 100%);
-        }
-
-        .sidebar-menu .menu-item:hover,
-        .sidebar-menu .menu-item.active {
-            background: rgba(255, 255, 255, 0.2);
-        }
-    </style>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/mother-theme.css">
 </head>
 
 <body>
@@ -46,10 +34,15 @@
                 <i class="fas fa-calendar-alt"></i> My Appointments
             </a>
             <a href="my-records.html" class="menu-item active">
-                <i class="fas fa-file-medical"></i> My Records
+                <i class="fas fa-file-medical"></i> Medical Records
             </a>
-            <a href="index.html" class="menu-item"
-                style="margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+            <a href="#" class="menu-item">
+                <i class="fas fa-book-medical"></i> Health Resources
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-comment-medical"></i> Contact Health Worker
+            </a>
+            <a href="index.html" class="menu-item" style="margin-top: auto; color: var(--error-color);">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
         </div>
@@ -57,59 +50,97 @@
 
     <!-- Main Content -->
     <main class="main-content">
-        <div class="top-bar">
-            <h2>My Medical Records</h2>
-            <div class="user-profile">
-                <div class="notification-bell" style="margin-right: 1.5rem; position: relative; cursor: pointer;">
-                    <i class="fas fa-bell" style="font-size: 1.2rem; color: var(--text-muted);"></i>
-                    <span class="badge"
-                        style="position: absolute; top: -5px; right: -5px; background: var(--danger-color); color: white; border-radius: 50%; padding: 2px 5px; font-size: 0.7rem;">2</span>
-                </div>
-                <div class="user-avatar" style="background: var(--primary-color);">EM</div>
-                <div>
-                    <div style="font-weight: 600;">Ella Martinez</div>
-                    <div style="font-size: 0.8rem; color: var(--text-muted);">Mother</div>
-                </div>
-            </div>
+        <div class="dashboard-header" style="margin-bottom: 32px; padding-bottom: 0; background: transparent;">
+            <h1>Medical Records</h1>
         </div>
 
-        <div class="card animate-slide-up delay-100 mb-4">
-            <div class="d-flex justify-between align-center mb-3">
-                <h3 class="text-primary">Visit History</h3>
-                <button class="btn btn-outline btn-sm"><i class="fas fa-download"></i> Download PDF</button>
+        <div class="grid-container" style="grid-template-columns: 3fr 1fr;">
+            <!-- Left Column: Timeline -->
+            <div class="left-column">
+                <div class="card">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
+                        <h3>Visit History</h3>
+                        <button class="btn btn-outline btn-sm"><i class="fas fa-download"></i> Download All</button>
+                    </div>
+
+                    <div class="timeline" style="padding-left: 16px;">
+                        <!-- Record 1 -->
+                        <div class="timeline-item">
+                            <div class="timeline-connector">
+                                <div class="timeline-dot" style="background: var(--primary-color); color: white;">
+                                    <i class="fas fa-notes-medical"></i>
+                                </div>
+                                <div class="timeline-line"></div>
+                            </div>
+                            <div class="timeline-content"
+                                style="background: var(--background-color); padding: 24px; border-radius: var(--radius-md); width: 100%;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                                    <div>
+                                        <h4 style="margin-bottom: 4px;">48-Hour Postpartum Checkup</h4>
+                                        <div class="text-muted text-small">Dec 12, 2023 • Dr. Maria Clara</div>
+                                    </div>
+                                    <button class="btn btn-text text-small"><i class="fas fa-download"></i> PDF</button>
+                                </div>
+                                <p style="margin-bottom: 16px; font-size: 15px;">Normal recovery. BP 120/80. No
+                                    complications reported. Patient advised on breastfeeding techniques.</p>
+                                <div style="display: flex; gap: 8px;">
+                                    <span class="badge badge-safe">Normal Findings</span>
+                                    <span class="badge badge-info">Follow-up Scheduled</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Record 2 -->
+                        <div class="timeline-item">
+                            <div class="timeline-connector">
+                                <div class="timeline-dot" style="background: var(--secondary-color); color: white;">
+                                    <i class="fas fa-baby"></i>
+                                </div>
+                                <div class="timeline-line"></div>
+                            </div>
+                            <div class="timeline-content"
+                                style="background: var(--background-color); padding: 24px; border-radius: var(--radius-md); width: 100%;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                                    <div>
+                                        <h4 style="margin-bottom: 4px;">Child Birth / Delivery</h4>
+                                        <div class="text-muted text-small">Dec 12, 2023 • Dr. Maria Clara</div>
+                                    </div>
+                                    <button class="btn btn-text text-small"><i class="fas fa-download"></i> PDF</button>
+                                </div>
+                                <p style="margin-bottom: 16px; font-size: 15px;">Normal Spontaneous Delivery. Baby Girl.
+                                    3.1kg. APGAR Score 9/10.</p>
+                                <div style="display: flex; gap: 8px;">
+                                    <span class="badge badge-safe">Successful Delivery</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Type</th>
-                            <th>Notes</th>
-                            <th>Provider</th>
-                        </tr>
-                    </thead>
-                    <tbody id="my-visit-history">
-                        <tr>
-                            <td>Dec 12, 2023</td>
-                            <td>48-Hour Postpartum Checkup</td>
-                            <td>Normal recovery. BP 120/80. No complications.</td>
-                            <td>Dr. Maria Clara</td>
-                        </tr>
-                        <tr>
-                            <td>Dec 12, 2023</td>
-                            <td>Child Birth / Delivery</td>
-                            <td>Normal Spontaneous Delivery. Baby Girl. 3.1kg.</td>
-                            <td>Dr. Maria Clara</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <!-- Right Column: Summary -->
+            <div class="right-column">
+                <div class="card">
+                    <h3>Quick Summary</h3>
+                    <div style="margin-top: 16px;">
+                        <div style="margin-bottom: 16px;">
+                            <div class="text-muted text-small">Total Visits</div>
+                            <div style="font-size: 24px; font-weight: 700;">2</div>
+                        </div>
+                        <div style="margin-bottom: 16px;">
+                            <div class="text-muted text-small">Next Due</div>
+                            <div style="font-size: 16px; font-weight: 600; color: var(--primary-color);">Jan 10, 2025
+                            </div>
+                        </div>
+                        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 16px 0;">
+                        <div>
+                            <div class="text-muted text-small" style="margin-bottom: 8px;">Recent Lab Results</div>
+                            <div class="text-muted text-small" style="font-style: italic;">No recent lab results</div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <div class="card animate-slide-up delay-200">
-            <h3 class="mb-3">Lab Results</h3>
-            <p class="text-muted text-center py-4">No lab results available.</p>
         </div>
     </main>
 

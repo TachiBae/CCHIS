@@ -4,261 +4,251 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - CCHIS</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Doctor Dashboard - CCHIS</title>
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            display: flex;
-            align-items: center;
-        }
-
-        .stat-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin-right: 1rem;
-        }
-
-        .stat-info h3 {
-            font-size: 2rem;
-            margin-bottom: 0;
-            line-height: 1;
-        }
-
-        .stat-info p {
-            color: var(--text-muted);
-            margin: 0;
-            font-size: 0.9rem;
-        }
-
-        .status-overview {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .status-box {
-            padding: 1.5rem;
-            border-radius: 8px;
-            color: white;
-            text-align: center;
-        }
-
-        .attention-list {
-            list-style: none;
-        }
-
-        .attention-item {
-            display: flex;
-            align-items: center;
-            padding: 1rem;
-            border-bottom: 1px solid #eee;
-        }
-
-        .attention-item:last-child {
-            border-bottom: none;
-        }
-
-        .attention-item.alert {
-            border-left: 4px solid var(--danger-color);
-            background-color: rgba(220, 53, 69, 0.05);
-        }
-
-        .attention-item.warning {
-            border-left: 4px solid var(--warning-color);
-            background-color: rgba(255, 193, 7, 0.05);
-        }
-
-        .attention-item.critical {
-            border-left: 4px solid var(--danger-color);
-            background-color: rgba(220, 53, 69, 0.1);
-        }
-
-        .attention-icon {
-            margin-right: 1rem;
-        }
-
-        .attention-item.alert .attention-icon {
-            color: var(--danger-color);
-        }
-
-        .attention-item.warning .attention-icon {
-            color: var(--warning-color);
-        }
-
-        /* Top Bar */
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        .user-profile {
-            display: flex;
-            align-items: center;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 0.5rem;
-        }
-    </style>
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/doctor-theme.css">
 </head>
 
 <body>
     <!-- Sidebar -->
     <nav class="sidebar">
         <div class="sidebar-header">
-            <div class="sidebar-brand"><i class="fas fa-heartbeat"></i> CCHIS</div>
+            <i class="fas fa-heartbeat" style="margin-right: 10px;"></i> CCHIS
         </div>
         <div class="sidebar-menu">
             <a href="doctor-dashboard.html" class="menu-item active">
-                <i class="fas fa-home"></i> Dashboard
+                <i class="fas fa-home"></i> <span>Dashboard</span>
             </a>
             <a href="profiles.html" class="menu-item">
-                <i class="fas fa-users"></i> Profiles
+                <i class="fas fa-users"></i> <span>Patient List</span>
             </a>
             <a href="postpartum.html" class="menu-item">
-                <i class="fas fa-procedures"></i> Postpartum
+                <i class="fas fa-procedures"></i> <span>Postpartum</span>
             </a>
             <a href="growth.html" class="menu-item">
-                <i class="fas fa-baby"></i> Child Growth
+                <i class="fas fa-baby"></i> <span>Child Growth</span>
             </a>
             <a href="reports.html" class="menu-item">
-                <i class="fas fa-chart-bar"></i> Reports
+                <i class="fas fa-chart-bar"></i> <span>Reports</span>
             </a>
             <a href="appointment-requests.html" class="menu-item">
-                <i class="fas fa-calendar-check"></i> Appointments
+                <i class="fas fa-calendar-check"></i> <span>Requests</span>
             </a>
             <a href="index.html" class="menu-item"
-                style="margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
-                <i class="fas fa-sign-out-alt"></i> Logout
+                style="margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1);">
+                <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
             </a>
         </div>
     </nav>
 
+    <!-- Top Navigation Bar -->
+    <header class="top-bar">
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search patients, records...">
+        </div>
+        <div class="user-nav">
+            <div class="notification-bell">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">5</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="text-align: right; line-height: 1.2;">
+                    <div style="font-weight: 600; font-size: 14px;">Dr. Maria Clara</div>
+                    <div style="font-size: 11px; color: var(--text-secondary);">Midwife</div>
+                </div>
+                <div
+                    style="width: 36px; height: 36px; background: var(--primary-color); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600;">
+                    MC</div>
+            </div>
+        </div>
+    </header>
+
     <!-- Main Content -->
     <main class="main-content">
-        <div class="top-bar">
-            <h2>Dashboard</h2>
-            <div class="user-profile">
-                <div class="notification-bell" style="margin-right: 1.5rem; position: relative; cursor: pointer;">
-                    <i class="fas fa-bell" style="font-size: 1.2rem; color: var(--text-muted);"></i>
-                    <span class="badge"
-                        style="position: absolute; top: -5px; right: -5px; background: var(--danger-color); color: white; border-radius: 50%; padding: 2px 5px; font-size: 0.7rem;">5</span>
-                </div>
-                <div class="user-avatar">MC</div>
-                <div>
-                    <div style="font-weight: 600;">Dr. Maria Clara</div>
-                    <div style="font-size: 0.8rem; color: var(--text-muted);">Midwife</div>
-                </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <h1>Dashboard Overview</h1>
+            <div style="color: var(--text-secondary); font-size: 13px;">
+                <i class="far fa-calendar-alt"></i> Today, Nov 30, 2025
             </div>
         </div>
 
         <!-- Stats Grid -->
         <div class="stats-grid">
-            <div class="stat-card animate-slide-up delay-100">
-                <div class="stat-icon" style="background-color: rgba(102, 126, 234, 0.1); color: var(--primary-color);">
-                    <i class="fas fa-user-nurse"></i>
+            <!-- Card 1 -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon" style="background: rgba(102, 126, 234, 0.1); color: var(--primary-color);">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <span class="badge bg-normal" style="font-size: 10px;">+12%</span>
                 </div>
-                <div class="stat-info">
-                    <h3 id="stat-active-pairs">--</h3>
-                    <p>Active Mother-Child Pairs</p>
-                </div>
+                <div class="stat-value" id="stat-active-pairs">42</div>
+                <div class="stat-label">Active Patients</div>
             </div>
-            <div class="stat-card animate-slide-up delay-200">
-                <div class="stat-icon" style="background-color: rgba(220, 53, 69, 0.1); color: var(--danger-color);">
-                    <i class="fas fa-clock"></i>
+
+            <!-- Card 2 -->
+            <div class="stat-card" style="border-top-color: var(--warning-color);">
+                <div class="stat-header">
+                    <div class="stat-icon" style="background: rgba(253, 203, 110, 0.1); color: var(--warning-color);">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <span class="badge bg-warning" style="font-size: 10px;">Action Req</span>
                 </div>
-                <div class="stat-info">
-                    <h3 id="stat-overdue" style="color: var(--danger-color);">--</h3>
-                    <p>Overdue Follow-ups</p>
-                </div>
+                <div class="stat-value" id="stat-overdue">8</div>
+                <div class="stat-label">Overdue Visits</div>
             </div>
-            <div class="stat-card animate-slide-up delay-300">
-                <div class="stat-icon" style="background-color: rgba(40, 167, 69, 0.1); color: var(--success-color);">
-                    <i class="fas fa-syringe"></i>
+
+            <!-- Card 3 -->
+            <div class="stat-card" style="border-top-color: var(--success-color);">
+                <div class="stat-header">
+                    <div class="stat-icon" style="background: rgba(0, 184, 148, 0.1); color: var(--success-color);">
+                        <i class="fas fa-syringe"></i>
+                    </div>
+                    <span class="badge bg-normal" style="font-size: 10px;">Today</span>
                 </div>
-                <div class="stat-info">
-                    <h3 id="stat-immunizations">--</h3>
-                    <p>Upcoming Immunizations</p>
-                </div>
+                <div class="stat-value" id="stat-immunizations">15</div>
+                <div class="stat-label">Vaccinations Due</div>
             </div>
-            <div class="stat-card animate-slide-up delay-400">
-                <div class="stat-icon" style="background-color: rgba(255, 193, 7, 0.1); color: var(--warning-color);">
-                    <i class="fas fa-exclamation-triangle"></i>
+
+            <!-- Card 4 -->
+            <div class="stat-card" style="border-top-color: var(--error-color);">
+                <div class="stat-header">
+                    <div class="stat-icon" style="background: rgba(214, 48, 49, 0.1); color: var(--error-color);">
+                        <i class="fas fa-procedures"></i>
+                    </div>
+                    <span class="badge bg-critical" style="font-size: 10px;">High Risk</span>
                 </div>
-                <div class="stat-info">
-                    <h3 id="stat-high-risk" style="color: var(--warning-color);">--</h3>
-                    <p>High-Risk Cases</p>
-                </div>
+                <div class="stat-value" id="stat-high-risk">3</div>
+                <div class="stat-label">Critical Cases</div>
             </div>
         </div>
 
-        <div class="d-flex" style="gap: 1.5rem; flex-wrap: wrap;">
-            <!-- Status Overview -->
-            <div style="flex: 1; min-width: 300px;" class="animate-slide-up delay-300">
-                <div class="card" style="height: 100%;">
-                    <div class="card-header">Patient Status Overview</div>
-                    <div class="status-overview">
-                        <div class="status-box bg-normal">
-                            <div style="font-size: 2rem; font-weight: bold;" id="status-normal">--</div>
-                            <div>Normal</div>
-                        </div>
-                        <div class="status-box bg-warning">
-                            <div style="font-size: 2rem; font-weight: bold;" id="status-at-risk">--</div>
-                            <div>At-Risk</div>
-                        </div>
-                        <div class="status-box bg-critical">
-                            <div style="font-size: 2rem; font-weight: bold;" id="status-critical">--</div>
-                            <div>Critical</div>
-                        </div>
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+            <!-- Left Column -->
+            <div>
+                <!-- Priority Alerts -->
+                <div class="card">
+                    <div class="card-header">
+                        <span>Priority Alerts</span>
+                        <button class="btn btn-sm btn-secondary">View All</button>
                     </div>
-                    <div style="margin-top: 1rem;">
-                        <div class="d-flex justify-between mb-1">
-                            <span>Postpartum Checkup Overdue</span>
-                            <span class="badge bg-critical pulse-red">3</span>
+                    <ul id="attention-list" style="list-style: none; padding: 0; margin: 0;">
+                        <!-- Populated by JS -->
+                        <li
+                            style="padding: 12px; border-left: 4px solid var(--error-color); background: #FFF5F5; margin-bottom: 8px; border-radius: 4px; display: flex; align-items: center; justify-content: space-between;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <i class="fas fa-exclamation-circle" style="color: var(--error-color);"></i>
+                                <div>
+                                    <div style="font-weight: 600; font-size: 13px;">Ana Reyes - High Risk</div>
+                                    <div style="font-size: 12px; color: var(--text-secondary);">Mental health screening
+                                        flagged</div>
+                                </div>
+                            </div>
+                            <button class="btn btn-sm btn-primary">Review</button>
+                        </li>
+                        <li
+                            style="padding: 12px; border-left: 4px solid var(--warning-color); background: #FFFCF5; margin-bottom: 8px; border-radius: 4px; display: flex; align-items: center; justify-content: space-between;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <i class="fas fa-clock" style="color: var(--warning-color);"></i>
+                                <div>
+                                    <div style="font-weight: 600; font-size: 13px;">Maria Santos - Overdue</div>
+                                    <div style="font-size: 12px; color: var(--text-secondary);">7-day postpartum visit
+                                        missed</div>
+                                </div>
+                            </div>
+                            <button class="btn btn-sm btn-secondary">Contact</button>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="card">
+                    <div class="card-header">
+                        <span>Recent Activity</span>
+                    </div>
+                    <div style="position: relative; padding-left: 20px;">
+                        <div
+                            style="position: absolute; left: 6px; top: 0; bottom: 0; width: 2px; background: var(--border-color);">
                         </div>
-                        <div class="d-flex justify-between">
-                            <span>Missed Follow-up Visits</span>
-                            <span class="badge bg-warning">5</span>
+
+                        <div style="margin-bottom: 20px; position: relative;">
+                            <div
+                                style="position: absolute; left: -20px; top: 4px; width: 14px; height: 14px; background: var(--primary-color); border-radius: 50%; border: 2px solid white;">
+                            </div>
+                            <div style="font-size: 13px; font-weight: 600;">New Patient Registered</div>
+                            <div style="font-size: 12px; color: var(--text-secondary);">Baby Martinez added to system
+                            </div>
+                            <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">10 mins ago
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 20px; position: relative;">
+                            <div
+                                style="position: absolute; left: -20px; top: 4px; width: 14px; height: 14px; background: var(--success-color); border-radius: 50%; border: 2px solid white;">
+                            </div>
+                            <div style="font-size: 13px; font-weight: 600;">Vaccination Completed</div>
+                            <div style="font-size: 12px; color: var(--text-secondary);">Baby Cruz received BCG</div>
+                            <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">1 hour ago
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Attention Panel -->
-            <div style="flex: 1; min-width: 300px;" class="animate-slide-up delay-400">
-                <div class="card" style="height: 100%;">
-                    <div class="card-header">What Needs Attention Today</div>
-                    <ul class="attention-list" id="attention-list">
-                        <!-- Populated by JS -->
-                    </ul>
+            <!-- Right Column -->
+            <div>
+                <!-- Pending Requests -->
+                <div class="card">
+                    <div class="card-header">
+                        <span>Pending Requests</span>
+                        <span class="badge bg-warning">1</span>
+                    </div>
+                    <div
+                        style="padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; margin-bottom: 12px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span style="font-weight: 600; font-size: 13px;">Ana Reyes</span>
+                            <span style="font-size: 11px; color: var(--text-secondary);">Dec 20</span>
+                        </div>
+                        <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">Postpartum
+                            Checkup</div>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-sm btn-primary" style="flex: 1;">Approve</button>
+                            <button class="btn btn-sm btn-secondary"
+                                style="flex: 1; border-color: var(--border-color); color: var(--text-secondary);">Decline</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mini Calendar (Static for visual) -->
+                <div class="card">
+                    <div class="card-header">
+                        <span>Calendar</span>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-weight: 600; margin-bottom: 12px;">November 2025</div>
+                        <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; font-size: 12px;">
+                            <div style="color: var(--text-secondary);">S</div>
+                            <div style="color: var(--text-secondary);">M</div>
+                            <div style="color: var(--text-secondary);">T</div>
+                            <div style="color: var(--text-secondary);">W</div>
+                            <div style="color: var(--text-secondary);">T</div>
+                            <div style="color: var(--text-secondary);">F</div>
+                            <div style="color: var(--text-secondary);">S</div>
+
+                            <div style="color: #ccc;">26</div>
+                            <div style="color: #ccc;">27</div>
+                            <div style="color: #ccc;">28</div>
+                            <div style="color: #ccc;">29</div>
+                            <div
+                                style="background: var(--primary-color); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+                                30</div>
+                            <div>1</div>
+                            <div>2</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

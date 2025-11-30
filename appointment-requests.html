@@ -5,101 +5,100 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Appointment Requests - CCHIS</title>
-    <link rel="stylesheet" href="css/style.css">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/doctor-theme.css">
 </head>
 
 <body>
     <!-- Sidebar -->
     <nav class="sidebar">
         <div class="sidebar-header">
-            <div class="sidebar-brand"><i class="fas fa-heartbeat"></i> CCHIS</div>
+            <i class="fas fa-heartbeat" style="margin-right: 10px;"></i> CCHIS
         </div>
         <div class="sidebar-menu">
             <a href="doctor-dashboard.html" class="menu-item">
-                <i class="fas fa-home"></i> Dashboard
+                <i class="fas fa-home"></i> <span>Dashboard</span>
             </a>
             <a href="profiles.html" class="menu-item">
-                <i class="fas fa-users"></i> Profiles
+                <i class="fas fa-users"></i> <span>Patient List</span>
             </a>
             <a href="postpartum.html" class="menu-item">
-                <i class="fas fa-procedures"></i> Postpartum
+                <i class="fas fa-procedures"></i> <span>Postpartum</span>
             </a>
             <a href="growth.html" class="menu-item">
-                <i class="fas fa-baby"></i> Child Growth
+                <i class="fas fa-baby"></i> <span>Child Growth</span>
             </a>
             <a href="reports.html" class="menu-item">
-                <i class="fas fa-chart-bar"></i> Reports
+                <i class="fas fa-chart-bar"></i> <span>Reports</span>
             </a>
             <a href="appointment-requests.html" class="menu-item active">
-                <i class="fas fa-calendar-check"></i> Appointments
+                <i class="fas fa-calendar-check"></i> <span>Requests</span>
             </a>
             <a href="index.html" class="menu-item"
-                style="margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
-                <i class="fas fa-sign-out-alt"></i> Logout
+                style="margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1);">
+                <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
             </a>
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="top-bar">
-            <h2>Appointment Management</h2>
-            <div class="user-profile">
-                <div class="notification-bell" style="margin-right: 1.5rem; position: relative; cursor: pointer;">
-                    <i class="fas fa-bell" style="font-size: 1.2rem; color: var(--text-muted);"></i>
-                    <span class="badge"
-                        style="position: absolute; top: -5px; right: -5px; background: var(--danger-color); color: white; border-radius: 50%; padding: 2px 5px; font-size: 0.7rem;">5</span>
+    <!-- Top Navigation Bar -->
+    <header class="top-bar">
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search requests...">
+        </div>
+        <div class="user-nav">
+            <div class="notification-bell">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">5</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="text-align: right; line-height: 1.2;">
+                    <div style="font-weight: 600; font-size: 14px;">Dr. Maria Clara</div>
+                    <div style="font-size: 11px; color: var(--text-secondary);">Midwife</div>
                 </div>
-                <div class="user-avatar">MC</div>
-                <div>
-                    <div style="font-weight: 600;">Dr. Maria Clara</div>
-                    <div style="font-size: 0.8rem; color: var(--text-muted);">Healthcare Provider</div>
-                </div>
+                <div
+                    style="width: 36px; height: 36px; background: var(--primary-color); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600;">
+                    MC</div>
             </div>
         </div>
+    </header>
 
-        <div class="card animate-slide-up delay-100">
-            <h3 class="mb-3">Pending Requests</h3>
-            <div class="table-responsive">
+    <!-- Main Content -->
+    <main class="main-content">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <h1>Appointment Requests</h1>
+            <button class="btn btn-primary">
+                <i class="fas fa-plus"></i> Create Appointment
+            </button>
+        </div>
+
+        <!-- Filters -->
+        <div class="tabs">
+            <button class="tab-btn active">Pending <span class="badge bg-warning"
+                    style="margin-left: 8px;">1</span></button>
+            <button class="tab-btn">Approved <span class="badge bg-normal" style="margin-left: 8px;">12</span></button>
+            <button class="tab-btn">Declined <span class="badge bg-critical" style="margin-left: 8px;">2</span></button>
+        </div>
+
+        <!-- Requests List -->
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <div class="table-responsive" style="border: none; border-radius: 0;">
                 <table>
                     <thead>
                         <tr>
-                            <th>Patient Name</th>
+                            <th>Patient</th>
                             <th>Requested Date & Time</th>
                             <th>Reason</th>
                             <th>Submitted</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="pending-appointments-body">
-                        <!-- Populated by JS -->
-                        <tr>
-                            <td colspan="5" class="text-center text-muted">No pending requests</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="card animate-slide-up delay-200 mt-4">
-            <h3 class="mb-3">Today's Appointments</h3>
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Time</th>
-                            <th>Patient</th>
-                            <th>Reason</th>
                             <th>Status</th>
-                            <th>Action</th>
+                            <th style="text-align: right;">Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="todays-appointments-body">
+                    <tbody id="requests-table-body">
                         <!-- Populated by JS -->
-                        <tr>
-                            <td colspan="5" class="text-center text-muted">No appointments scheduled for today</td>
-                        </tr>
                     </tbody>
                 </table>
             </div>

@@ -5,25 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Child - CCHIS</title>
-    <link rel="stylesheet" href="css/style.css">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* Mother-specific styles */
-        :root {
-            --primary-color: #ff8fa3;
-            --secondary-color: #fff0f3;
-            --accent-color: #ffccd5;
-        }
-
-        .sidebar {
-            background: linear-gradient(180deg, #ff8fa3 0%, #ff4d6d 100%);
-        }
-
-        .sidebar-menu .menu-item:hover,
-        .sidebar-menu .menu-item.active {
-            background: rgba(255, 255, 255, 0.2);
-        }
-    </style>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/mother-theme.css">
 </head>
 
 <body>
@@ -46,10 +34,15 @@
                 <i class="fas fa-calendar-alt"></i> My Appointments
             </a>
             <a href="my-records.html" class="menu-item">
-                <i class="fas fa-file-medical"></i> My Records
+                <i class="fas fa-file-medical"></i> Medical Records
             </a>
-            <a href="index.html" class="menu-item"
-                style="margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+            <a href="#" class="menu-item">
+                <i class="fas fa-book-medical"></i> Health Resources
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-comment-medical"></i> Contact Health Worker
+            </a>
+            <a href="index.html" class="menu-item" style="margin-top: auto; color: var(--error-color);">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
         </div>
@@ -57,99 +50,333 @@
 
     <!-- Main Content -->
     <main class="main-content">
-        <div class="top-bar">
-            <h2>My Child</h2>
-            <div class="user-profile">
-                <div class="notification-bell" style="margin-right: 1.5rem; position: relative; cursor: pointer;">
-                    <i class="fas fa-bell" style="font-size: 1.2rem; color: var(--text-muted);"></i>
-                    <span class="badge"
-                        style="position: absolute; top: -5px; right: -5px; background: var(--danger-color); color: white; border-radius: 50%; padding: 2px 5px; font-size: 0.7rem;">2</span>
-                </div>
-                <div class="user-avatar" style="background: var(--primary-color);">EM</div>
+        <div class="dashboard-header" style="margin-bottom: 32px; padding-bottom: 0; background: transparent;">
+            <h1>My Child</h1>
+        </div>
+
+        <!-- Child Header -->
+        <div class="card" style="text-align: center; padding-bottom: 48px;">
+            <div
+                style="width: 120px; height: 120px; border-radius: 50%; background: #E3F2FD; color: #1565C0; display: flex; align-items: center; justify-content: center; font-size: 48px; margin: 0 auto 16px auto; border: 4px solid white; box-shadow: var(--shadow-sm);">
+                👶
+            </div>
+            <h2 style="margin-bottom: 8px;">Baby Martinez</h2>
+            <p class="text-muted" style="margin-bottom: 24px;">Born Dec 12, 2023 • 6 Weeks Old</p>
+
+            <div style="display: flex; justify-content: center; gap: 48px;">
                 <div>
-                    <div style="font-weight: 600;">Ella Martinez</div>
-                    <div style="font-size: 0.8rem; color: var(--text-muted);">Mother</div>
+                    <div class="text-muted text-small">Weight</div>
+                    <div style="font-size: 24px; font-weight: 700;">4.2 kg</div>
+                </div>
+                <div>
+                    <div class="text-muted text-small">Height</div>
+                    <div style="font-size: 24px; font-weight: 700;">52 cm</div>
+                </div>
+                <div>
+                    <div class="text-muted text-small">Blood Type</div>
+                    <div style="font-size: 24px; font-weight: 700;">O+</div>
                 </div>
             </div>
         </div>
 
-        <div class="card animate-slide-up delay-100 mb-4">
-            <div class="d-flex justify-between align-center mb-3">
-                <h3 class="text-primary">Child Information</h3>
-                <button class="btn btn-outline btn-sm"><i class="fas fa-edit"></i> Request Update</button>
-            </div>
-
-            <div class="info-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-                <div>
-                    <p class="text-muted mb-1">Full Name</p>
-                    <p class="mb-2 font-weight-bold" id="my-c-name">Baby Martinez</p>
-                </div>
-                <div>
-                    <p class="text-muted mb-1">Sex</p>
-                    <p class="mb-2" id="my-c-sex">Female</p>
-                </div>
-                <div>
-                    <p class="text-muted mb-1">Date of Birth</p>
-                    <p class="mb-2" id="my-c-dob">Dec 12, 2023</p>
-                </div>
-                <div>
-                    <p class="text-muted mb-1">Place of Birth</p>
-                    <p class="mb-2" id="my-c-pob">Pasig City General Hospital</p>
-                </div>
-                <div>
-                    <p class="text-muted mb-1">Birth Weight</p>
-                    <p class="mb-2" id="my-c-weight">3.1 kg</p>
-                </div>
-                <div>
-                    <p class="text-muted mb-1">Birth Length</p>
-                    <p class="mb-2" id="my-c-length">49 cm</p>
-                </div>
-                <div>
-                    <p class="text-muted mb-1">Blood Type</p>
-                    <p class="mb-2" id="my-c-blood">O+</p>
-                </div>
+        <div class="grid-container">
+            <!-- Left Column: Growth & Milestones -->
+            <div class="left-column">
+                <!-- Growth Chart Placeholder -->
+                <path d="M0,100 C20,80 50,60 100,40" stroke="#E0E0E0" stroke-width="2" fill="none" />
+                <path d="M0,100 C20,70 50,50 100,20" stroke="#E0E0E0" stroke-width="2" fill="none" />
+                <path d="M0,100 C20,75 50,55 100,30" stroke="#4ECDC4" stroke-width="3" fill="none" />
+                </svg>
             </div>
         </div>
 
-        <div class="card animate-slide-up delay-200">
-            <h3 class="mb-3">Vaccination Schedule</h3>
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Vaccine</th>
-                            <th>Age Due</th>
-                            <th>Date Given</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="my-c-immunizations">
-                        <tr>
-                            <td>BCG</td>
-                            <td>At Birth</td>
-                            <td>Dec 12, 2023</td>
-                            <td><span class="badge bg-normal">Completed</span></td>
-                        </tr>
-                        <tr>
-                            <td>Hepatitis B</td>
-                            <td>At Birth</td>
-                            <td>Dec 12, 2023</td>
-                            <td><span class="badge bg-normal">Completed</span></td>
-                        </tr>
-                        <tr>
-                            <td>DPT 1</td>
-                            <td>6 Weeks</td>
-                            <td>-</td>
-                            <td><span class="badge bg-warning">Due Soon</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+        <!-- Milestones -->
+        <div class="card">
+            <h3>Milestones Checklist</h3>
+            <div style="margin-top: 16px;">
+                <div
+                    style="display: flex; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border-color);">
+                    <input type="checkbox" checked
+                        style="width: 20px; height: 20px; margin-right: 16px; accent-color: var(--success-color);">
+                    <span style="text-decoration: line-through; color: var(--text-secondary);">Reacts to loud
+                        sounds</span>
+                </div>
+                <div
+                    style="display: flex; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border-color);">
+                    <input type="checkbox" checked
+                        style="width: 20px; height: 20px; margin-right: 16px; accent-color: var(--success-color);">
+                    <span style="text-decoration: line-through; color: var(--text-secondary);">Calms down when
+                        spoken to</span>
+                </div>
+                <div
+                    style="display: flex; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border-color);">
+                    <input type="checkbox"
+                        style="width: 20px; height: 20px; margin-right: 16px; accent-color: var(--success-color);">
+                    <span>Holds head steady</span>
+                </div>
+                <div style="display: flex; align-items: center; padding: 12px 0;">
+                    <input type="checkbox"
+                        style="width: 20px; height: 20px; margin-right: 16px; accent-color: var(--success-color);">
+                    <span>Follows things with eyes</span>
+                </div>
             </div>
         </div>
-    </main>
+        </div>
 
-    <script src="js/data.js"></script>
-    <script src="js/script.js"></script>
-</body>
+        <!-- Right Column: Vaccines -->
+        <div class="right-column">
+            <div class="card">
+                <h3>Vaccination Schedule</h3>
+                <div class="table-responsive" style="margin-top: 16px;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: #F8F9FA;">
+                                <th
+                                    style="padding: 12px; text-align: left; font-size: 13px; color: var(--text-secondary);">
+                                    VACCINE</th>
+                                <th
+                                    style="padding: 12px; text-align: left; font-size: 13px; color: var(--text-secondary);">
+                                    STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 16px 12px;">
+                                    <div style="font-weight: 600;">BCG</div>
+                                    <div class="text-small text-muted">At Birth</div>
+                                </td>
+                                <td style="padding: 16px 12px;">
+                                    <span class="badge badge-safe"><i class="fas fa-check"></i> Done</span>
+                                </td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 16px 12px;">
+                                    <div style="font-weight: 600;">Hepatitis B</div>
+                                    <div class="text-small text-muted">At Birth</div>
+                                </td>
+                                <td style="padding: 16px 12px;">
+                                    <span class="badge badge-safe"><i class="fas fa-check"></i> Done</span>
+                                </td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 16px 12px;">
+                                    <div style="font-weight: 600;">Pentavalent 1</div>
+                                    <div class="text-small text-muted">6 Weeks</div>
+                                </td>
+                                <td style="padding: 16px 12px;">
+                                    <span class="badge badge-warning">Due Soon</span>
+                                </td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 16px 12px;">
+                                    <div style="font-weight: 600;">OPV 1</div>
+                                    <div class="text-small text-muted">6 Weeks</div>
+                                </td>
+                                <td style="padding: 16px 12px;">
+                                    <span class="badge badge-warning">Due Soon</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>My Child - CCHIS</title>
+                <!-- Font Awesome -->
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+                <!-- Google Fonts -->
+                <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+                    rel="stylesheet">
+                <!-- Custom Styles -->
+                <link rel="stylesheet" href="css/style.css">
+                <link rel="stylesheet" href="css/mother-theme.css">
+                </head>
+
+                <body>
+                    <!-- Sidebar -->
+                    <nav class="sidebar">
+                        <div class="sidebar-header">
+                            <div class="sidebar-brand"><i class="fas fa-heartbeat"></i> CCHIS</div>
+                        </div>
+                        <div class="sidebar-menu">
+                            <a href="mother-dashboard.html" class="menu-item">
+                                <i class="fas fa-home"></i> My Dashboard
+                            </a>
+                            <a href="my-profile.html" class="menu-item">
+                                <i class="fas fa-user"></i> My Profile
+                            </a>
+                            <a href="my-child.html" class="menu-item active">
+                                <i class="fas fa-baby"></i> My Child
+                            </a>
+                            <a href="my-appointments.html" class="menu-item">
+                                <i class="fas fa-calendar-alt"></i> My Appointments
+                            </a>
+                            <a href="my-records.html" class="menu-item">
+                                <i class="fas fa-file-medical"></i> Medical Records
+                            </a>
+                            <a href="#" class="menu-item">
+                                <i class="fas fa-book-medical"></i> Health Resources
+                            </a>
+                            <a href="#" class="menu-item">
+                                <i class="fas fa-comment-medical"></i> Contact Health Worker
+                            </a>
+                            <a href="index.html" class="menu-item" style="margin-top: auto; color: var(--error-color);">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                        </div>
+                    </nav>
+
+                    <!-- Main Content -->
+                    <main class="main-content">
+                        <div class="dashboard-header"
+                            style="margin-bottom: 32px; padding-bottom: 0; background: transparent;">
+                            <h1>My Child</h1>
+                        </div>
+
+                        <!-- Child Header -->
+                        <div class="card" style="text-align: center; padding-bottom: 48px;">
+                            <div
+                                style="width: 120px; height: 120px; border-radius: 50%; background: #E3F2FD; color: #1565C0; display: flex; align-items: center; justify-content: center; font-size: 48px; margin: 0 auto 16px auto; border: 4px solid white; box-shadow: var(--shadow-sm);">
+                                👶
+                            </div>
+                            <h2 style="margin-bottom: 8px;">Baby Martinez</h2>
+                            <p class="text-muted" style="margin-bottom: 24px;">Born Dec 12, 2023 • 6 Weeks Old</p>
+
+                            <div style="display: flex; justify-content: center; gap: 48px;">
+                                <div>
+                                    <div class="text-muted text-small">Weight</div>
+                                    <div style="font-size: 24px; font-weight: 700;">4.2 kg</div>
+                                </div>
+                                <div>
+                                    <div class="text-muted text-small">Height</div>
+                                    <div style="font-size: 24px; font-weight: 700;">52 cm</div>
+                                </div>
+                                <div>
+                                    <div class="text-muted text-small">Blood Type</div>
+                                    <div style="font-size: 24px; font-weight: 700;">O+</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid-container">
+                            <!-- Left Column: Growth & Milestones -->
+                            <div class="left-column">
+                                <!-- Growth Chart Placeholder -->
+                                <div class="card">
+                                    <div
+                                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                                        <h3>Growth Chart</h3>
+                                        <button class="btn btn-text">Update Measurements</button>
+                                    </div>
+                                    <div
+                                        style="height: 300px; background: #F8F9FA; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; border: 2px dashed var(--border-color); position: relative;">
+                                        <canvas id="growthChart"></canvas>
+                                    </div>
+                                </div>
+
+                                <!-- Milestones -->
+                                <div class="card">
+                                    <h3>Milestones Checklist</h3>
+                                    <div style="margin-top: 16px;">
+                                        <div
+                                            style="display: flex; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border-color);">
+                                            <input type="checkbox" checked
+                                                style="width: 20px; height: 20px; margin-right: 16px; accent-color: var(--success-color);">
+                                            <span
+                                                style="text-decoration: line-through; color: var(--text-secondary);">Reacts
+                                                to loud
+                                                sounds</span>
+                                        </div>
+                                        <div
+                                            style="display: flex; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border-color);">
+                                            <input type="checkbox" checked
+                                                style="width: 20px; height: 20px; margin-right: 16px; accent-color: var(--success-color);">
+                                            <span
+                                                style="text-decoration: line-through; color: var(--text-secondary);">Calms
+                                                down when
+                                                spoken to</span>
+                                        </div>
+                                        <div
+                                            style="display: flex; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border-color);">
+                                            <input type="checkbox"
+                                                style="width: 20px; height: 20px; margin-right: 16px; accent-color: var(--success-color);">
+                                            <span>Holds head steady</span>
+                                        </div>
+                                        <div style="display: flex; align-items: center; padding: 12px 0;">
+                                            <input type="checkbox"
+                                                style="width: 20px; height: 20px; margin-right: 16px; accent-color: var(--success-color);">
+                                            <span>Follows things with eyes</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Column: Vaccines -->
+                            <div class="right-column">
+                                <div class="card">
+                                    <h3>Vaccination Schedule</h3>
+                                    <div class="table-responsive" style="margin-top: 16px;">
+                                        <table style="width: 100%; border-collapse: collapse;">
+                                            <thead>
+                                                <tr style="background: #F8F9FA;">
+                                                    <th
+                                                        style="padding: 12px; text-align: left; font-size: 13px; color: var(--text-secondary);">
+                                                        VACCINE</th>
+                                                    <th
+                                                        style="padding: 12px; text-align: left; font-size: 13px; color: var(--text-secondary);">
+                                                        STATUS</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr style="border-bottom: 1px solid var(--border-color);">
+                                                    <td style="padding: 16px 12px;">
+                                                        <div style="font-weight: 600;">BCG</div>
+                                                        <div class="text-small text-muted">At Birth</div>
+                                                    </td>
+                                                    <td style="padding: 16px 12px;">
+                                                        <span class="badge badge-safe"><i class="fas fa-check"></i>
+                                                            Done</span>
+                                                    </td>
+                                                </tr>
+                                                <tr style="border-bottom: 1px solid var(--border-color);">
+                                                    <td style="padding: 16px 12px;">
+                                                        <div style="font-weight: 600;">Hepatitis B</div>
+                                                        <div class="text-small text-muted">At Birth</div>
+                                                    </td>
+                                                    <td style="padding: 16px 12px;">
+                                                        <span class="badge badge-safe"><i class="fas fa-check"></i>
+                                                            Done</span>
+                                                    </td>
+                                                </tr>
+                                                <tr style="border-bottom: 1px solid var(--border-color);">
+                                                    <td style="padding: 16px 12px;">
+                                                        <div style="font-weight: 600;">Pentavalent 1</div>
+                                                        <div class="text-small text-muted">6 Weeks</div>
+                                                    </td>
+                                                    <td style="padding: 16px 12px;">
+                                                        <span class="badge badge-warning">Due Soon</span>
+                                                    </td>
+                                                </tr>
+                                                <tr style="border-bottom: 1px solid var(--border-color);">
+                                                    <td style="padding: 16px 12px;">
+                                                        <div style="font-weight: 600;">OPV 1</div>
+                                                        <div class="text-small text-muted">6 Weeks</div>
+                                                    </td>
+                                                    <td style="padding: 16px 12px;">
+                                                        <span class="badge badge-warning">Due Soon</span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                    <script src="js/data.js"></script>
+                    <script src="js/script.js"></script>
+                </body>
 
 </html>

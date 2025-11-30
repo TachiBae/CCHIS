@@ -5,25 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Profile - CCHIS</title>
-    <link rel="stylesheet" href="css/style.css">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* Mother-specific styles */
-        :root {
-            --primary-color: #ff8fa3;
-            --secondary-color: #fff0f3;
-            --accent-color: #ffccd5;
-        }
-
-        .sidebar {
-            background: linear-gradient(180deg, #ff8fa3 0%, #ff4d6d 100%);
-        }
-
-        .sidebar-menu .menu-item:hover,
-        .sidebar-menu .menu-item.active {
-            background: rgba(255, 255, 255, 0.2);
-        }
-    </style>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/mother-theme.css">
 </head>
 
 <body>
@@ -46,10 +34,15 @@
                 <i class="fas fa-calendar-alt"></i> My Appointments
             </a>
             <a href="my-records.html" class="menu-item">
-                <i class="fas fa-file-medical"></i> My Records
+                <i class="fas fa-file-medical"></i> Medical Records
             </a>
-            <a href="index.html" class="menu-item"
-                style="margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+            <a href="#" class="menu-item">
+                <i class="fas fa-book-medical"></i> Health Resources
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-comment-medical"></i> Contact Health Worker
+            </a>
+            <a href="index.html" class="menu-item" style="margin-top: auto; color: var(--error-color);">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
         </div>
@@ -57,60 +50,95 @@
 
     <!-- Main Content -->
     <main class="main-content">
-        <div class="top-bar">
-            <h2>My Profile</h2>
-            <div class="user-profile">
-                <div class="notification-bell" style="margin-right: 1.5rem; position: relative; cursor: pointer;">
-                    <i class="fas fa-bell" style="font-size: 1.2rem; color: var(--text-muted);"></i>
-                    <span class="badge"
-                        style="position: absolute; top: -5px; right: -5px; background: var(--danger-color); color: white; border-radius: 50%; padding: 2px 5px; font-size: 0.7rem;">2</span>
-                </div>
-                <div class="user-avatar" style="background: var(--primary-color);">EM</div>
-                <div>
-                    <div style="font-weight: 600;">Ella Martinez</div>
-                    <div style="font-size: 0.8rem; color: var(--text-muted);">Mother</div>
-                </div>
-            </div>
+        <div class="dashboard-header" style="margin-bottom: 32px; padding-bottom: 0; background: transparent;">
+            <h1>My Profile</h1>
         </div>
 
-        <div class="card animate-slide-up delay-100">
-            <div class="d-flex justify-between align-center mb-3">
-                <h3 class="text-primary">Personal Information</h3>
-                <button class="btn btn-outline btn-sm"><i class="fas fa-edit"></i> Request Update</button>
-            </div>
+        <div class="card" style="position: relative;">
+            <button class="btn btn-secondary" style="position: absolute; top: 24px; right: 24px;">
+                <i class="fas fa-edit"></i> Edit Profile
+            </button>
 
-            <div class="info-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="grid-container" style="grid-template-columns: 1fr 3fr; gap: 48px;">
+                <!-- Left Column: Photo -->
+                <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+                    <div
+                        style="width: 120px; height: 120px; border-radius: 50%; background: var(--primary-color); color: white; display: flex; align-items: center; justify-content: center; font-size: 48px; border: 4px solid var(--primary-color); margin-bottom: 16px;">
+                        EM
+                    </div>
+                    <h2 style="margin-bottom: 4px;">Ella Martinez</h2>
+                    <p class="text-muted">Mother</p>
+                    <div class="badge badge-safe" style="margin-top: 12px;">Active Account</div>
+                </div>
+
+                <!-- Right Column: Info -->
                 <div>
-                    <p class="text-muted mb-1">Full Name</p>
-                    <p class="mb-2 font-weight-bold" id="my-name">Ella Martinez</p>
-                </div>
-                <div>
-                    <p class="text-muted mb-1">Date of Birth / Age</p>
-                    <p class="mb-2" id="my-dob-age">May 15, 1995 (28 yrs)</p>
-                </div>
-                <div>
-                    <p class="text-muted mb-1">Civil Status</p>
-                    <p class="mb-2" id="my-civil-status">Married</p>
-                </div>
-                <div>
-                    <p class="text-muted mb-1">Occupation</p>
-                    <p class="mb-2" id="my-occupation">Teacher</p>
-                </div>
-                <div>
-                    <p class="text-muted mb-1">Contact Number</p>
-                    <p class="mb-2" id="my-contact">0917-123-4567</p>
-                </div>
-                <div>
-                    <p class="text-muted mb-1">Email Address</p>
-                    <p class="mb-2" id="my-email">ella.martinez@email.com</p>
-                </div>
-                <div style="grid-column: span 2;">
-                    <p class="text-muted mb-1">Complete Address</p>
-                    <p class="mb-2" id="my-address">Brgy. San Jose, Pasig City</p>
-                </div>
-                <div style="grid-column: span 2;">
-                    <p class="text-muted mb-1">Emergency Contact</p>
-                    <p class="mb-2" id="my-emergency">Juan Martinez (Husband) - 0917-111-2222</p>
+                    <!-- Personal Info -->
+                    <div style="margin-bottom: 32px;">
+                        <h3
+                            style="border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-bottom: 16px; color: var(--primary-color);">
+                            Personal Information</h3>
+                        <div class="grid-2-col" style="display: grid; gap: 24px;">
+                            <div>
+                                <label class="text-muted text-small">Full Name</label>
+                                <div style="font-weight: 600;">Ella Martinez</div>
+                            </div>
+                            <div>
+                                <label class="text-muted text-small">Date of Birth</label>
+                                <div style="font-weight: 600;">May 15, 1995 (28 yrs)</div>
+                            </div>
+                            <div>
+                                <label class="text-muted text-small">Civil Status</label>
+                                <div style="font-weight: 600;">Married</div>
+                            </div>
+                            <div>
+                                <label class="text-muted text-small">Occupation</label>
+                                <div style="font-weight: 600;">Teacher</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Info -->
+                    <div style="margin-bottom: 32px;">
+                        <h3
+                            style="border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-bottom: 16px; color: var(--primary-color);">
+                            Contact Details</h3>
+                        <div class="grid-2-col" style="display: grid; gap: 24px;">
+                            <div>
+                                <label class="text-muted text-small">Phone Number</label>
+                                <div style="font-weight: 600;">0917-123-4567</div>
+                            </div>
+                            <div>
+                                <label class="text-muted text-small">Email Address</label>
+                                <div style="font-weight: 600;">ella.martinez@email.com</div>
+                            </div>
+                            <div style="grid-column: span 2;">
+                                <label class="text-muted text-small">Home Address</label>
+                                <div style="font-weight: 600;">Brgy. San Jose, Pasig City</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Emergency Contact -->
+                    <div>
+                        <h3
+                            style="border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-bottom: 16px; color: var(--primary-color);">
+                            Emergency Contact</h3>
+                        <div class="grid-2-col" style="display: grid; gap: 24px;">
+                            <div>
+                                <label class="text-muted text-small">Name</label>
+                                <div style="font-weight: 600;">Juan Martinez</div>
+                            </div>
+                            <div>
+                                <label class="text-muted text-small">Relationship</label>
+                                <div style="font-weight: 600;">Husband</div>
+                            </div>
+                            <div>
+                                <label class="text-muted text-small">Phone Number</label>
+                                <div style="font-weight: 600;">0917-111-2222</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

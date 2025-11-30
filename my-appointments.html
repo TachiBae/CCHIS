@@ -5,25 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Appointments - CCHIS</title>
-    <link rel="stylesheet" href="css/style.css">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* Mother-specific styles */
-        :root {
-            --primary-color: #ff8fa3;
-            --secondary-color: #fff0f3;
-            --accent-color: #ffccd5;
-        }
-
-        .sidebar {
-            background: linear-gradient(180deg, #ff8fa3 0%, #ff4d6d 100%);
-        }
-
-        .sidebar-menu .menu-item:hover,
-        .sidebar-menu .menu-item.active {
-            background: rgba(255, 255, 255, 0.2);
-        }
-    </style>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/mother-theme.css">
 </head>
 
 <body>
@@ -46,10 +34,15 @@
                 <i class="fas fa-calendar-alt"></i> My Appointments
             </a>
             <a href="my-records.html" class="menu-item">
-                <i class="fas fa-file-medical"></i> My Records
+                <i class="fas fa-file-medical"></i> Medical Records
             </a>
-            <a href="index.html" class="menu-item"
-                style="margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+            <a href="#" class="menu-item">
+                <i class="fas fa-book-medical"></i> Health Resources
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-comment-medical"></i> Contact Health Worker
+            </a>
+            <a href="index.html" class="menu-item" style="margin-top: auto; color: var(--error-color);">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
         </div>
@@ -57,92 +50,125 @@
 
     <!-- Main Content -->
     <main class="main-content">
-        <div class="top-bar">
-            <h2>My Appointments</h2>
-            <div class="user-profile">
-                <div class="notification-bell" style="margin-right: 1.5rem; position: relative; cursor: pointer;">
-                    <i class="fas fa-bell" style="font-size: 1.2rem; color: var(--text-muted);"></i>
-                    <span class="badge"
-                        style="position: absolute; top: -5px; right: -5px; background: var(--danger-color); color: white; border-radius: 50%; padding: 2px 5px; font-size: 0.7rem;">2</span>
-                </div>
-                <div class="user-avatar" style="background: var(--primary-color);">EM</div>
-                <div>
-                    <div style="font-weight: 600;">Ella Martinez</div>
-                    <div style="font-size: 0.8rem; color: var(--text-muted);">Mother</div>
-                </div>
-            </div>
+        <div class="dashboard-header" style="margin-bottom: 32px; padding-bottom: 0; background: transparent;">
+            <h1>My Appointments</h1>
         </div>
 
-        <div class="card animate-slide-up delay-100 mb-4">
-            <h3 class="mb-3">Request New Appointment</h3>
-            <form id="appointment-request-form">
-                <div class="d-flex" style="gap: 1rem;">
-                    <div class="form-group" style="flex: 1;">
-                        <label>Preferred Date</label>
-                        <input type="date" class="form-control" required>
+        <div class="grid-container" style="grid-template-columns: 2fr 1fr;">
+            <!-- Left Column: Appointments List -->
+            <div class="left-column">
+                <!-- Filters -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-primary" style="padding: 8px 16px; font-size: 14px;">All</button>
+                        <button class="btn btn-secondary"
+                            style="padding: 8px 16px; font-size: 14px; border: 1px solid var(--border-color); color: var(--text-secondary); background: white;">Upcoming</button>
+                        <button class="btn btn-secondary"
+                            style="padding: 8px 16px; font-size: 14px; border: 1px solid var(--border-color); color: var(--text-secondary); background: white;">Past</button>
+                        <button class="btn btn-secondary"
+                            style="padding: 8px 16px; font-size: 14px; border: 1px solid var(--border-color); color: var(--text-secondary); background: white;">Cancelled</button>
                     </div>
-                    <div class="form-group" style="flex: 1;">
-                        <label>Preferred Time</label>
-                        <select class="form-control" required>
-                            <option value="">Select Time</option>
-                            <option value="09:00">9:00 AM</option>
-                            <option value="10:00">10:00 AM</option>
-                            <option value="11:00">11:00 AM</option>
-                            <option value="13:00">1:00 PM</option>
-                            <option value="14:00">2:00 PM</option>
-                            <option value="15:00">3:00 PM</option>
-                        </select>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span class="text-small text-muted">View:</span>
+                        <button class="btn btn-text" style="color: var(--primary-color);"><i
+                                class="fas fa-list"></i></button>
+                        <button class="btn btn-text" style="color: var(--text-secondary);"><i
+                                class="fas fa-calendar-alt"></i></button>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label>Reason for Visit</label>
-                    <select class="form-control" required>
-                        <option value="">Select Reason</option>
-                        <option value="Postpartum Checkup">Postpartum Checkup</option>
-                        <option value="Child Immunization">Child Immunization</option>
-                        <option value="Medical Consultation">Medical Consultation</option>
-                        <option value="Family Planning">Family Planning</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Additional Notes</label>
-                    <textarea class="form-control" rows="2" placeholder="Any specific concerns?"></textarea>
-                </div>
-                <div class="text-right">
-                    <button type="submit" class="btn btn-primary">Submit Request</button>
-                </div>
-            </form>
-        </div>
 
-        <div class="card animate-slide-up delay-200">
-            <h3 class="mb-3">My Appointments</h3>
-            <div class="tabs mb-3">
-                <button class="tab-btn active">Upcoming</button>
-                <button class="tab-btn">Past</button>
+                <!-- Appointment Cards -->
+                <div class="appointment-list">
+                    <!-- Card 1 -->
+                    <div class="card"
+                        style="border-left: 4px solid var(--warning-color); padding: 24px; display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; gap: 24px; align-items: center;">
+                            <div style="text-align: center; min-width: 60px;">
+                                <div style="font-size: 14px; color: var(--text-secondary); text-transform: uppercase;">
+                                    Dec</div>
+                                <div style="font-size: 24px; font-weight: 700; color: var(--text-primary);">19</div>
+                            </div>
+                            <div>
+                                <h3 style="margin-bottom: 4px;">Postpartum Checkup (7-Day)</h3>
+                                <div class="text-muted" style="margin-bottom: 8px;"><i class="far fa-clock"></i> 10:00
+                                    AM - 11:00 AM</div>
+                                <div class="text-muted text-small"><i class="fas fa-user-md"></i> Dr. Santos • Room 302
+                                </div>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <span class="badge badge-warning" style="margin-bottom: 8px;">Pending</span>
+                            <div>
+                                <button class="btn btn-text text-small"
+                                    style="color: var(--error-color);">Cancel</button>
+                                <button class="btn btn-text text-small">Reschedule</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="card"
+                        style="border-left: 4px solid var(--success-color); padding: 24px; display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; gap: 24px; align-items: center;">
+                            <div style="text-align: center; min-width: 60px;">
+                                <div style="font-size: 14px; color: var(--text-secondary); text-transform: uppercase;">
+                                    Jan</div>
+                                <div style="font-size: 24px; font-weight: 700; color: var(--text-primary);">10</div>
+                            </div>
+                            <div>
+                                <h3 style="margin-bottom: 4px;">Child Immunization</h3>
+                                <div class="text-muted" style="margin-bottom: 8px;"><i class="far fa-clock"></i> 09:00
+                                    AM - 10:00 AM</div>
+                                <div class="text-muted text-small"><i class="fas fa-user-md"></i> Nurse Joy • Pedia Ward
+                                </div>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <span class="badge badge-safe" style="margin-bottom: 8px;">Confirmed</span>
+                            <div>
+                                <button class="btn btn-text text-small"
+                                    style="color: var(--error-color);">Cancel</button>
+                                <button class="btn btn-text text-small">Reschedule</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="appointment-list">
-                <!-- Example Pending -->
-                <div class="d-flex justify-between align-center p-3 mb-2"
-                    style="background: #fff9db; border-radius: 8px; border-left: 4px solid #f59f00;">
-                    <div>
-                        <div class="font-weight-bold">Postpartum Checkup (7-Day)</div>
-                        <div class="text-muted" style="font-size: 0.9rem;">Dec 19, 2023 at 10:00 AM</div>
-                    </div>
-                    <span class="badge bg-warning">Pending Confirmation</span>
+            <!-- Right Column: Request Form -->
+            <div class="right-column">
+                <div class="card" style="position: sticky; top: 24px;">
+                    <h3>Request New Appointment</h3>
+                    <form id="appointment-request-form" style="margin-top: 24px;">
+                        <div style="margin-bottom: 16px;">
+                            <label>Reason for Visit</label>
+                            <select required>
+                                <option value="">Select Reason</option>
+                                <option value="Postpartum Checkup">Postpartum Checkup</option>
+                                <option value="Child Immunization">Child Immunization</option>
+                                <option value="Medical Consultation">Medical Consultation</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom: 16px;">
+                            <label>Preferred Date</label>
+                            <input type="date" required>
+                        </div>
+                        <div style="margin-bottom: 16px;">
+                            <label>Preferred Time</label>
+                            <select required>
+                                <option value="">Select Time</option>
+                                <option value="09:00">9:00 AM</option>
+                                <option value="10:00">10:00 AM</option>
+                                <option value="14:00">2:00 PM</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom: 24px;">
+                            <label>Notes</label>
+                            <textarea rows="3" placeholder="Any specific concerns?"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Request</button>
+                    </form>
                 </div>
-
-                <!-- Example Confirmed -->
-                <!-- 
-                <div class="d-flex justify-between align-center p-3 mb-2" style="background: #e6fcf5; border-radius: 8px; border-left: 4px solid #0ca678;">
-                    <div>
-                        <div class="font-weight-bold">Child Immunization</div>
-                        <div class="text-muted" style="font-size: 0.9rem;">Jan 15, 2024 at 9:00 AM</div>
-                    </div>
-                    <span class="badge bg-normal">Confirmed</span>
-                </div>
-                -->
             </div>
         </div>
     </main>
@@ -162,22 +188,6 @@
                 btn.innerText = originalText;
                 btn.disabled = false;
                 this.reset();
-
-                // Add to list visually (mock)
-                const list = document.querySelector('.appointment-list');
-                const div = document.createElement('div');
-                div.className = 'd-flex justify-between align-center p-3 mb-2';
-                div.style.background = '#fff9db';
-                div.style.borderRadius = '8px';
-                div.style.borderLeft = '4px solid #f59f00';
-                div.innerHTML = `
-                    <div>
-                        <div class="font-weight-bold">New Request</div>
-                        <div class="text-muted" style="font-size: 0.9rem;">Pending Date</div>
-                    </div>
-                    <span class="badge bg-warning">Pending Confirmation</span>
-                `;
-                list.prepend(div);
             }, 1000);
         });
     </script>

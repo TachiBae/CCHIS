@@ -786,6 +786,74 @@ function initMyChild() {
             </tr>
         `).join('');
     }
+
+    // Render Growth Charts
+    renderMotherGrowthCharts(child);
+}
+
+function renderMotherGrowthCharts(child) {
+    // Simulate growth data based on birth stats
+    const birthWeight = child.birthWeight;
+    const birthLength = child.birthLength;
+
+    // Mock data generation (just for visual)
+    const weightData = [birthWeight, birthWeight + 0.8, birthWeight + 1.5, birthWeight + 2.1];
+    const heightData = [birthLength, birthLength + 3, birthLength + 6, birthLength + 8];
+    const labels = ['Birth', '1 Month', '2 Months', '3 Months'];
+
+    // Weight Chart
+    const ctxWeight = document.getElementById('motherWeightChart');
+    if (ctxWeight) {
+        new Chart(ctxWeight.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Weight (kg)',
+                    data: weightData,
+                    borderColor: '#4ECDC4',
+                    backgroundColor: 'rgba(78, 205, 196, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }, {
+                    label: 'Standard',
+                    data: [3.3, 4.5, 5.6, 6.4], // WHO approx
+                    borderColor: '#ccc',
+                    borderDash: [5, 5],
+                    pointRadius: 0,
+                    fill: false
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+    }
+
+    // Height Chart
+    const ctxHeight = document.getElementById('motherHeightChart');
+    if (ctxHeight) {
+        new Chart(ctxHeight.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Length (cm)',
+                    data: heightData,
+                    borderColor: '#FF6B6B',
+                    backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }, {
+                    label: 'Standard',
+                    data: [49.9, 54.7, 58.4, 61.4], // WHO approx
+                    borderColor: '#ccc',
+                    borderDash: [5, 5],
+                    pointRadius: 0,
+                    fill: false
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+    }
 }
 
 function initMyAppointments() {

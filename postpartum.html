@@ -5,71 +5,98 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Postpartum Monitoring - CCHIS</title>
-    <link rel="stylesheet" href="css/style.css">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/doctor-theme.css">
 </head>
 
 <body>
     <!-- Sidebar -->
     <nav class="sidebar">
         <div class="sidebar-header">
-            <div class="sidebar-brand"><i class="fas fa-heartbeat"></i> CCHIS</div>
+            <i class="fas fa-heartbeat" style="margin-right: 10px;"></i> CCHIS
         </div>
         <div class="sidebar-menu">
             <a href="doctor-dashboard.html" class="menu-item">
-                <i class="fas fa-home"></i> Dashboard
+                <i class="fas fa-home"></i> <span>Dashboard</span>
             </a>
             <a href="profiles.html" class="menu-item">
-                <i class="fas fa-users"></i> Profiles
+                <i class="fas fa-users"></i> <span>Patient List</span>
             </a>
             <a href="postpartum.html" class="menu-item active">
-                <i class="fas fa-procedures"></i> Postpartum
+                <i class="fas fa-procedures"></i> <span>Postpartum</span>
             </a>
             <a href="growth.html" class="menu-item">
-                <i class="fas fa-baby"></i> Child Growth
+                <i class="fas fa-baby"></i> <span>Child Growth</span>
             </a>
             <a href="reports.html" class="menu-item">
-                <i class="fas fa-chart-bar"></i> Reports
+                <i class="fas fa-chart-bar"></i> <span>Reports</span>
             </a>
             <a href="appointment-requests.html" class="menu-item">
-                <i class="fas fa-calendar-check"></i> Appointments
+                <i class="fas fa-calendar-check"></i> <span>Requests</span>
             </a>
             <a href="index.html" class="menu-item"
-                style="margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
-                <i class="fas fa-sign-out-alt"></i> Logout
+                style="margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1);">
+                <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
             </a>
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="top-bar">
-            <h2>Postpartum Monitoring</h2>
-            <div class="user-profile">
-                <div class="notification-bell" style="margin-right: 1.5rem; position: relative; cursor: pointer;">
-                    <i class="fas fa-bell" style="font-size: 1.2rem; color: var(--text-muted);"></i>
-                    <span class="badge"
-                        style="position: absolute; top: -5px; right: -5px; background: var(--danger-color); color: white; border-radius: 50%; padding: 2px 5px; font-size: 0.7rem;">5</span>
+    <!-- Top Navigation Bar -->
+    <header class="top-bar">
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search postpartum records...">
+        </div>
+        <div class="user-nav">
+            <div class="notification-bell">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">5</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="text-align: right; line-height: 1.2;">
+                    <div style="font-weight: 600; font-size: 14px;">Dr. Maria Clara</div>
+                    <div style="font-size: 11px; color: var(--text-secondary);">Midwife</div>
                 </div>
-                <div class="user-avatar">MC</div>
-                <div>
-                    <div style="font-weight: 600;">Dr. Maria Clara</div>
-                    <div style="font-size: 0.8rem; color: var(--text-muted);">Midwife</div>
-                </div>
+                <div
+                    style="width: 36px; height: 36px; background: var(--primary-color); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600;">
+                    MC</div>
             </div>
         </div>
+    </header>
 
-        <div class="card animate-slide-up delay-100">
-            <div class="table-responsive">
+    <!-- Main Content -->
+    <main class="main-content">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <h1>Postpartum Monitoring</h1>
+            <button class="btn btn-secondary">
+                <i class="fas fa-file-export"></i> Export Report
+            </button>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active">All Patients <span class="badge bg-info"
+                    style="margin-left: 8px;">42</span></button>
+            <button class="tab-btn">Safe <span class="badge bg-normal" style="margin-left: 8px;">35</span></button>
+            <button class="tab-btn">Monitoring <span class="badge bg-warning"
+                    style="margin-left: 8px;">4</span></button>
+            <button class="tab-btn">Overdue <span class="badge bg-critical" style="margin-left: 8px;">3</span></button>
+        </div>
+
+        <!-- Monitoring Table -->
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <div class="table-responsive" style="border: none; border-radius: 0;">
                 <table>
                     <thead>
                         <tr>
-                            <th>Mother</th>
+                            <th>Patient</th>
                             <th>48-hour Visit</th>
                             <th>7-day Visit</th>
                             <th>6-week Visit</th>
                             <th>Risk Status</th>
-                            <th>Action</th>
+                            <th style="text-align: right;">Action</th>
                         </tr>
                     </thead>
                     <tbody id="postpartum-table-body">
@@ -84,44 +111,54 @@
     <div id="visit-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="modal-title">Record Postpartum Visit</div>
-                <div class="close-modal">&times;</div>
+                <h3>Record Postpartum Visit</h3>
+                <button class="btn btn-icon close-modal"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
                 <form id="visit-form">
-                    <div class="form-group">
+                    <div
+                        style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
                         <label>Mother's Name</label>
                         <input type="text" id="v-mother-name" class="form-control" readonly
-                            style="background-color: #f9f9f9;">
+                            style="background-color: #F8F9FA;">
                     </div>
 
-                    <div class="d-flex" style="gap: 1rem;">
-                        <div class="form-group" style="flex: 1;">
+                    <h4
+                        style="font-size: 12px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 16px;">
+                        1. Visit Details</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+                        <div>
                             <label>Date of Visit</label>
                             <input type="date" class="form-control" required>
                         </div>
-                        <div class="form-group" style="flex: 1;">
+                        <div>
                             <label>Time</label>
                             <input type="time" class="form-control" required>
                         </div>
                     </div>
 
-                    <div class="d-flex" style="gap: 1rem;">
-                        <div class="form-group" style="flex: 1;">
+                    <h4
+                        style="font-size: 12px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 16px;">
+                        2. Vital Signs</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+                        <div>
                             <label>BP (mmHg)</label>
                             <input type="text" class="form-control" placeholder="120/80">
                         </div>
-                        <div class="form-group" style="flex: 1;">
+                        <div>
                             <label>Temp (°C)</label>
                             <input type="text" class="form-control" placeholder="36.5">
                         </div>
-                        <div class="form-group" style="flex: 1;">
+                        <div>
                             <label>HR (bpm)</label>
                             <input type="text" class="form-control" placeholder="80">
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <h4
+                        style="font-size: 12px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 16px;">
+                        3. Assessment</h4>
+                    <div style="margin-bottom: 16px;">
                         <label>Breastfeeding Status</label>
                         <select class="form-control">
                             <option>Exclusive Breastfeeding</option>
@@ -130,28 +167,35 @@
                         </select>
                     </div>
 
-                    <div class="form-group">
+                    <div style="margin-bottom: 24px;">
                         <label>Mental Health Screening (PHQ-9)</label>
-                        <div style="border: 1px solid #eee; padding: 1rem; border-radius: 4px;">
-                            <p style="margin-bottom: 0.5rem; font-size: 0.9rem;">Little interest or pleasure in doing
-                                things?</p>
-                            <div class="d-flex" style="gap: 1rem;">
-                                <label><input type="radio" name="phq1" value="0"> Not at all</label>
-                                <label><input type="radio" name="phq1" value="1"> Several days</label>
-                                <label><input type="radio" name="phq1" value="2"> More than half</label>
+                        <div
+                            style="border: 1px solid var(--border-color); padding: 16px; border-radius: var(--radius-md); background: #F8F9FA;">
+                            <p style="margin-bottom: 8px; font-size: 13px;">Little interest or pleasure in doing things?
+                            </p>
+                            <div style="display: flex; gap: 16px;">
+                                <label style="display: flex; align-items: center; font-weight: normal;"><input
+                                        type="radio" name="phq1" value="0" style="margin-right: 8px;"> Not at
+                                    all</label>
+                                <label style="display: flex; align-items: center; font-weight: normal;"><input
+                                        type="radio" name="phq1" value="1" style="margin-right: 8px;"> Several
+                                    days</label>
+                                <label style="display: flex; align-items: center; font-weight: normal;"><input
+                                        type="radio" name="phq1" value="2" style="margin-right: 8px;"> More than
+                                    half</label>
                             </div>
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div style="margin-bottom: 16px;">
                         <label>Notes / Symptoms</label>
                         <textarea class="form-control" rows="3" placeholder="Enter any observations..."></textarea>
                     </div>
-
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-primary" style="width: 100%;">Save Visit Record</button>
-                    </div>
                 </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary close-modal" style="margin-right: 8px;">Cancel</button>
+                <button type="submit" form="visit-form" class="btn btn-primary">Save Visit Record</button>
             </div>
         </div>
     </div>
