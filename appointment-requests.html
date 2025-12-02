@@ -105,6 +105,65 @@
         </div>
     </main>
 
+    <!-- Create Appointment Modal -->
+    <div id="create-appointment-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New Appointment</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="create-appointment-form">
+                    <div class="form-group">
+                        <label for="ca-patient">Patient (Mother)</label>
+                        <select id="ca-patient" class="form-control" required>
+                            <option value="">Select Patient</option>
+                            <!-- Populated by JS -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ca-type">Appointment Type</label>
+                        <select id="ca-type" class="form-control" required>
+                            <option value="Postpartum Checkup">Postpartum Checkup</option>
+                            <option value="Prenatal Checkup">Prenatal Checkup</option>
+                            <option value="Vaccination">Vaccination</option>
+                            <option value="Consultation">Consultation</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ca-date">Date</label>
+                        <input type="date" id="ca-date" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ca-time">Time</label>
+                        <select id="ca-time" class="form-control" required>
+                            <option value="09:00">09:00 AM</option>
+                            <option value="10:00">10:00 AM</option>
+                            <option value="11:00">11:00 AM</option>
+                            <option value="13:00">01:00 PM</option>
+                            <option value="14:00">02:00 PM</option>
+                            <option value="15:00">03:00 PM</option>
+                            <option value="16:00">04:00 PM</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ca-provider">Healthcare Provider</label>
+                        <input type="text" id="ca-provider" class="form-control" value="Dr. Maria Clara" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="ca-notes">Notes / Instructions</label>
+                        <textarea id="ca-notes" class="form-control" rows="3"
+                            placeholder="Add any special instructions..."></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline close-modal-btn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Create Appointment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script src="js/data.js"></script>
     <script src="js/script.js"></script>
 </body>

@@ -80,11 +80,15 @@
                     style="width: 32px; height: 32px; background: #E3F2FD; color: #1565C0; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
                     <i class="fas fa-baby"></i>
                 </div>
-                <div>
-                    <div style="font-weight: 600; font-size: 13px;">Juan Santos</div>
-                    <div style="font-size: 11px; color: var(--text-secondary);">3 months • Male</div>
+                <div id="growth-child-info">
+                    <div style="font-weight: 600; font-size: 13px;" id="gc-name">Loading...</div>
+                    <div style="font-size: 11px; color: var(--text-secondary);" id="gc-details">...</div>
                 </div>
-                <button class="btn btn-sm btn-secondary" style="margin-left: 12px;">Change</button>
+                <div style="border-left: 1px solid #eee; padding-left: 12px; margin-left: 12px;">
+                    <select id="growth-child-select" class="form-select" style="border: none; background: transparent; font-size: 13px; cursor: pointer; outline: none; color: var(--primary-color); font-weight: 500;">
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
             </div>
         </div>
 

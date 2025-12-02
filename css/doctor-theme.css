@@ -1,5 +1,9 @@
 /* Doctor's View Theme - CCHIS */
 
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 :root {
     /* Color Palette */
     --primary-color: #667eea;

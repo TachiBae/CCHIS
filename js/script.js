@@ -12,6 +12,36 @@ document.addEventListener('DOMContentLoaded', function () {
     // Mobile Sidebar Toggle
     // (Assuming we might add a toggle button later, but for now just basic logic)
 
+    // Load data from localStorage if available
+    if (localStorage.getItem('cchisData')) {
+        const savedData = JSON.parse(localStorage.getItem('cchisData'));
+        window.mockData = { ...window.mockData, ...savedData };
+
+        // Ensure new data structures exist (migration for old data)
+        if (!window.mockData.users) window.mockData.users = [];
+        if (!window.mockData.doctors) window.mockData.doctors = [];
+        if (!window.mockData.notifications) {
+            window.mockData.notifications = [
+                { id: 1, userId: 'M006', type: 'success', message: 'Appointment confirmed', time: '2 hours ago', read: false },
+                { id: 2, userId: 'M006', type: 'warning', message: 'Vaccine due in 3 days', time: 'Today', read: false },
+                { id: 3, userId: 'M006', type: 'info', message: 'New health tip available', time: 'Yesterday', read: false }
+            ];
+        }
+
+        // Save back to ensure structure is updated
+        saveData();
+    } else {
+        // Initialize notifications if not present in original data
+        if (!window.mockData.notifications) {
+            window.mockData.notifications = [
+                { id: 1, userId: 'M006', type: 'success', message: 'Appointment confirmed', time: '2 hours ago', read: false },
+                { id: 2, userId: 'M006', type: 'warning', message: 'Vaccine due in 3 days', time: 'Today', read: false },
+                { id: 3, userId: 'M006', type: 'info', message: 'New health tip available', time: 'Yesterday', read: false }
+            ];
+        }
+        saveData();
+    }
+
     // Dashboard Logic
     if (currentPage === 'doctor-dashboard.html' && window.mockData) {
         renderDashboardStats();
@@ -26,7 +56,10 @@ document.addEventListener('DOMContentLoaded', function () {
     if (logoutBtn) {
         logoutBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            localStorage.clear();
+            // Don't clear cchisData on logout, only session info
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('userId');
+            localStorage.removeItem('userName');
             window.location.href = 'index.html';
         });
     }
@@ -34,6 +67,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // Update User Profile in Sidebar/Top Bar
     updateUserProfileDisplay();
 });
+
+function saveData() {
+    localStorage.setItem('cchisData', JSON.stringify(window.mockData));
+}
 
 function renderDashboardStats() {
     const stats = window.mockData.stats;
@@ -203,8 +240,8 @@ function renderProfilesList(mothers) {
         const child = window.mockData.children.find(c => c.id === mother.childId);
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td><a href="#" class="text-primary font-weight-bold" onclick="openMotherModal('${mother.id}')">${mother.name}</a></td>
-            <td>${child ? `<a href="#" onclick="openChildModal('${child.id}')">${child.name}</a>` : 'N/A'}</td>
+            <td><span style="cursor: pointer;" onclick="openMotherModal('${mother.id}')">${mother.name}</span></td>
+            <td>${child ? `<span style="cursor: pointer;" onclick="openChildModal('${child.id}')">${child.name}</span>` : 'N/A'}</td>
             <td>${formatDate(mother.deliveryDate) || 'Pregnant'}</td>
             <td><span class="badge ${getStatusBadgeClass(mother.status)}">${mother.status}</span></td>
             <td>
@@ -297,7 +334,7 @@ window.openChildModal = function (childId) {
     document.getElementById('c-blood').textContent = child.bloodType || 'N/A';
 
     const mother = window.mockData.mothers.find(m => m.id === child.motherId);
-    document.getElementById('c-mother').innerHTML = mother ? `<a href="#" onclick="openMotherModal('${mother.id}'); document.getElementById('child-modal').classList.remove('show');">${mother.name}</a>` : 'N/A';
+    document.getElementById('c-mother').innerHTML = mother ? `<span style="cursor: pointer;" onclick="openMotherModal('${mother.id}'); document.getElementById('child-modal').classList.remove('show');">${mother.name}</span>` : 'N/A';
 
     // Populate immunizations
     const immList = window.mockData.immunizations.filter(i => i.childId === childId);
@@ -461,26 +498,91 @@ window.openVisitModal = function (motherId) {
 };
 
 // Growth Page Logic
+// Growth Page Logic
 function initGrowthPage() {
-    renderImmunizationSchedule();
-    renderGrowthCharts();
+    // Default to first child or use URL param if we had one
+    let currentChildId = window.mockData.children[0].id;
+
+    updateGrowthPage(currentChildId);
+
+    // Event Listener for Dropdown
+    const selector = document.getElementById('growth-child-select');
+    if (selector) {
+        selector.addEventListener('change', (e) => {
+            const val = e.target.value;
+            if (val === 'add-new') {
+                // Handle Add New Child
+                alert('Redirecting to Add New Child form...');
+                // In a real app, this would open a modal or redirect
+                selector.value = currentChildId; // Reset for now
+            } else {
+                currentChildId = val;
+                updateGrowthPage(currentChildId);
+            }
+        });
+    }
 }
 
-function renderImmunizationSchedule() {
+function updateGrowthPage(childId) {
+    const child = window.mockData.children.find(c => c.id === childId);
+    if (!child) return;
+
+    // Update Info Header
+    document.getElementById('gc-name').textContent = child.name;
+    // Calculate age (approx)
+    const age = calculateAge(child.birthDate);
+    document.getElementById('gc-details').textContent = `${age} • ${child.sex}`;
+
+    // Populate Dropdown (Siblings)
+    const selector = document.getElementById('growth-child-select');
+    if (selector) {
+        const siblings = window.mockData.children.filter(c => c.motherId === child.motherId);
+
+        if (siblings.length <= 1) {
+            selector.parentElement.style.display = 'none'; // Hide if no siblings
+        } else {
+            selector.parentElement.style.display = 'block';
+            selector.innerHTML = siblings.map(s => `
+                <option value="${s.id}" ${s.id === childId ? 'selected' : ''}>
+                    ${s.name} (${formatDate(s.birthDate)})
+                </option>
+            `).join('') + '<option value="add-new" style="font-weight: bold; color: var(--primary-color);">+ Add New Child</option>';
+        }
+    }
+
+    renderImmunizationSchedule(childId);
+    renderGrowthCharts(childId);
+}
+
+function calculateAge(birthDate) {
+    const birth = new Date(birthDate);
+    const now = new Date();
+    const diff = now - birth;
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+    if (days < 30) return `${days} days`;
+    const months = Math.floor(days / 30.44);
+    if (months < 12) return `${months} months`;
+    const years = Math.floor(months / 12);
+    return `${years} yrs`;
+}
+
+function renderImmunizationSchedule(childId) {
     const tbody = document.getElementById('imm-table-body');
     if (!tbody) return;
 
-    // For demo, just show immunizations for the first child
-    const childId = window.mockData.children[0].id;
     const imms = window.mockData.immunizations.filter(i => i.childId === childId);
 
-    // Add some dummy future schedule items
-    const schedule = [
-        ...imms,
-        { vaccine: "DPT 1", ageDue: "6 weeks", status: "Upcoming", dueDate: "2024-01-15" },
-        { vaccine: "Polio 1", ageDue: "6 weeks", status: "Missed", dueDate: "2023-12-01" },
-        { vaccine: "PCV 1", ageDue: "6 weeks", status: "Upcoming", dueDate: "2024-01-15" }
-    ];
+    // Add some dummy future schedule items based on child age/logic
+    // For this mock, we'll just use what's in data + some statics if empty
+    let schedule = [...imms];
+
+    if (schedule.length === 0) {
+        schedule = [
+            { vaccine: "BCG", ageDue: "At Birth", status: "Pending", dueDate: "2023-12-01" },
+            { vaccine: "Hepatitis B", ageDue: "At Birth", status: "Pending", dueDate: "2023-12-01" }
+        ];
+    }
 
     tbody.innerHTML = schedule.map(i => `
         <tr>
@@ -488,20 +590,34 @@ function renderImmunizationSchedule() {
             <td>${i.ageDue || 'At Birth'}</td>
             <td>${i.dateGiven ? formatDate(i.dateGiven) : '-'}</td>
             <td>${renderVisitBadge(i.status)}</td>
+            <td style="text-align: right;">
+                <button class="btn btn-sm btn-outline">Update</button>
+            </td>
         </tr>
     `).join('');
 }
 
-function renderGrowthCharts() {
+function renderGrowthCharts(childId) {
+    const child = window.mockData.children.find(c => c.id === childId);
+    if (!child) return;
+
+    // Destroy existing charts if they exist to avoid canvas reuse issues
+    if (window.weightChartInstance) window.weightChartInstance.destroy();
+    if (window.heightChartInstance) window.heightChartInstance.destroy();
+
+    // Mock data generation based on birth weight/length
+    const bw = child.birthWeight;
+    const bl = child.birthLength;
+
     // Weight Chart
     const ctxWeight = document.getElementById('weightChart').getContext('2d');
-    new Chart(ctxWeight, {
+    window.weightChartInstance = new Chart(ctxWeight, {
         type: 'line',
         data: {
             labels: ['0', '1', '2', '3', '4', '5', '6'],
             datasets: [{
                 label: 'Child Weight (kg)',
-                data: [3.2, 4.5, 5.8, 6.4, null, null, null],
+                data: [bw, bw + 1.2, bw + 2.5, bw + 3.1, null, null, null],
                 borderColor: '#667eea',
                 tension: 0.4
             }, {
@@ -512,18 +628,18 @@ function renderGrowthCharts() {
                 pointRadius: 0
             }]
         },
-        options: { responsive: true }
+        options: { responsive: true, maintainAspectRatio: false }
     });
 
     // Height Chart
     const ctxHeight = document.getElementById('heightChart').getContext('2d');
-    new Chart(ctxHeight, {
+    window.heightChartInstance = new Chart(ctxHeight, {
         type: 'line',
         data: {
             labels: ['0', '1', '2', '3', '4', '5', '6'],
             datasets: [{
                 label: 'Child Length (cm)',
-                data: [49, 54, 58, 61, null, null, null],
+                data: [bl, bl + 5, bl + 9, bl + 12, null, null, null],
                 borderColor: '#28a745',
                 tension: 0.4
             }, {
@@ -534,7 +650,7 @@ function renderGrowthCharts() {
                 pointRadius: 0
             }]
         },
-        options: { responsive: true }
+        options: { responsive: true, maintainAspectRatio: false }
     });
 }
 
@@ -737,6 +853,64 @@ function initMotherDashboard() {
             }
         }
     }
+
+    // Render Notifications
+    renderMotherNotifications(userId);
+}
+
+function renderMotherNotifications(userId) {
+    const notifContainer = document.querySelector('.card h3:contains("Notifications")')?.closest('.card');
+    // The selector above is pseudo-code-ish because :contains isn't standard JS.
+    // Let's find the card that contains the "Notifications" header.
+    const headers = document.querySelectorAll('h3');
+    let notifCard = null;
+    headers.forEach(h => {
+        if (h.textContent.includes('Notifications')) {
+            notifCard = h.closest('.card');
+        }
+    });
+
+    if (!notifCard) return;
+
+    const notifications = window.mockData.notifications.filter(n => n.userId === userId);
+
+    // Update count in header
+    const header = notifCard.querySelector('h3');
+    if (header) header.textContent = `🔔 Notifications (${notifications.filter(n => !n.read).length})`;
+
+    const listContainer = notifCard.querySelector('div[style*="flex-direction: column"]');
+    if (!listContainer) return;
+
+    if (notifications.length === 0) {
+        listContainer.innerHTML = '<p class="text-muted text-small">No new notifications.</p>';
+        return;
+    }
+
+    listContainer.innerHTML = notifications.slice(0, 5).map(n => {
+        let iconClass = 'fa-info-circle';
+        let colorVar = 'var(--primary-color)';
+
+        if (n.type === 'success') {
+            iconClass = 'fa-check-circle';
+            colorVar = 'var(--success-color)';
+        } else if (n.type === 'warning') {
+            iconClass = 'fa-exclamation-circle';
+            colorVar = 'var(--warning-color)';
+        } else if (n.type === 'critical') {
+            iconClass = 'fa-times-circle';
+            colorVar = 'var(--error-color)'; // Assuming error-color exists or use critical color
+        }
+
+        return `
+        <div style="display: flex; gap: 12px; align-items: flex-start;">
+            <div style="color: ${colorVar}; margin-top: 2px;"><i class="fas ${iconClass}"></i></div>
+            <div>
+                <div style="font-size: 14px;">${n.message}</div>
+                <div class="text-small text-muted">${n.time}</div>
+            </div>
+        </div>
+        `;
+    }).join('');
 }
 
 function initMyProfile() {
@@ -926,55 +1100,282 @@ function renderMyAppointments(userId) {
 }
 
 function initAppointmentRequestsPage() {
-    renderAppointmentRequests();
+    // Initialize tabs
+    const tabs = document.querySelectorAll('.tab-btn');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Update active state
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            // Filter content
+            const status = tab.textContent.trim().split(' ')[0]; // Extract "Pending", "Approved", etc.
+            renderAppointmentRequests(status);
+        });
+    });
+
+    // Initial render
+    renderAppointmentRequests('Pending');
+    updateRequestBadges();
+
+    // Create Appointment Modal Logic
+    const createBtn = document.querySelector('.btn-primary'); // Assuming it's the first/only primary button in header
+    // Better selector:
+    const createApptBtn = Array.from(document.querySelectorAll('button')).find(b => b.textContent.includes('Create Appointment'));
+
+    if (createApptBtn) {
+        createApptBtn.addEventListener('click', () => {
+            openCreateAppointmentModal();
+        });
+    }
+
+    // Close Modal Logic
+    const modal = document.getElementById('create-appointment-modal');
+    if (modal) {
+        modal.querySelectorAll('.close-modal, .close-modal-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                modal.classList.remove('show');
+            });
+        });
+
+        // Form Submission
+        const form = document.getElementById('create-appointment-form');
+        if (form) {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                handleCreateAppointment(form);
+            });
+        }
+    }
 }
 
-function renderAppointmentRequests() {
-    const tbody = document.getElementById('pending-appointments-body');
+function openCreateAppointmentModal() {
+    const modal = document.getElementById('create-appointment-modal');
+    if (!modal) return;
+
+    // Populate Patients
+    const select = document.getElementById('ca-patient');
+    if (select) {
+        select.innerHTML = '<option value="">Select Patient</option>' +
+            window.mockData.mothers.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
+    }
+
+    // Set default date to tomorrow
+    const dateInput = document.getElementById('ca-date');
+    if (dateInput) {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        dateInput.value = tomorrow.toISOString().split('T')[0];
+    }
+
+    modal.classList.add('show');
+}
+
+function handleCreateAppointment(form) {
+    const motherId = document.getElementById('ca-patient').value;
+    const type = document.getElementById('ca-type').value;
+    const date = document.getElementById('ca-date').value;
+    const time = document.getElementById('ca-time').value;
+    const notes = document.getElementById('ca-notes').value;
+
+    const mother = window.mockData.mothers.find(m => m.id === motherId);
+    if (!mother) return;
+
+    // Create new appointment object
+    const newAppt = {
+        id: `R${Date.now()}`,
+        motherId: motherId,
+        motherName: mother.name,
+        date: date,
+        time: time,
+        reason: type,
+        status: 'Confirmed', // Created by doctor, so auto-confirmed
+        submitted: new Date().toISOString().split('T')[0],
+        notes: notes
+    };
+
+    window.mockData.appointmentRequests.unshift(newAppt);
+
+    // Add Notification for Mother
+    window.mockData.notifications.unshift({
+        id: Date.now(),
+        userId: motherId,
+        type: 'success',
+        message: `New appointment scheduled: ${type} on ${date} at ${time}.`,
+        time: 'Just now',
+        read: false
+    });
+
+    saveData();
+
+    alert('Appointment created successfully!');
+    document.getElementById('create-appointment-modal').classList.remove('show');
+    form.reset();
+
+    // Refresh list if on Confirmed tab, or just update badges
+    updateRequestBadges();
+
+    // If we are on the Confirmed tab, re-render
+    const activeTab = document.querySelector('.tab-btn.active');
+    if (activeTab && activeTab.textContent.includes('Approved')) {
+        renderAppointmentRequests('Confirmed');
+    }
+}
+
+function renderAppointmentRequests(status = 'Pending') {
+    const tbody = document.getElementById('requests-table-body');
     if (!tbody) return;
 
-    const pending = window.mockData.appointmentRequests.filter(r => r.status === 'Pending');
+    // Map tab names to data statuses if necessary
+    let dataStatus = status;
+    if (status === 'Approved') dataStatus = 'Confirmed';
 
-    if (pending.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No pending requests</td></tr>';
+    const filtered = window.mockData.appointmentRequests.filter(r => r.status === dataStatus);
+
+    if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted">No ${status.toLowerCase()} requests found</td></tr>`;
         return;
     }
 
-    tbody.innerHTML = pending.map(r => `
+    tbody.innerHTML = filtered.map(r => `
         <tr>
             <td>
                 <div class="d-flex align-center">
-                    <div class="avatar-sm mr-2">${r.motherName.charAt(0)}</div>
+                    <div class="avatar-sm mr-2" style="background: var(--primary-color); color: white; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">${r.motherName.charAt(0)}</div>
                     <div>${r.motherName}</div>
                 </div>
             </td>
-            <td>${r.date} <br> <small class="text-muted">${r.time}</small></td>
+            <td>${formatDate(r.date)} <br> <small class="text-muted">${r.time}</small></td>
             <td>${r.reason}</td>
-            <td>${r.submitted}</td>
-            <td>
-                <button class="btn btn-sm btn-primary" onclick="approveAppointment('${r.id}')"><i class="fas fa-check"></i></button>
-                <button class="btn btn-sm btn-outline" onclick="declineAppointment('${r.id}')"><i class="fas fa-times"></i></button>
+            <td>${formatDate(r.submitted)}</td>
+            <td><span class="badge ${getStatusBadgeClass(r.status)}">${r.status}</span></td>
+            <td style="text-align: right;">
+                ${r.status === 'Pending' ? `
+                <button class="btn btn-sm btn-primary" onclick="approveAppointment('${r.id}')" title="Approve"><i class="fas fa-check"></i></button>
+                <button class="btn btn-sm btn-outline" onclick="openDeclineModal('${r.id}')" title="Decline"><i class="fas fa-times"></i></button>
+                ` : `
+                <button class="btn btn-sm btn-outline" onclick="undoAppointment('${r.id}')" title="Undo / Revert to Pending"><i class="fas fa-undo"></i></button>
+                `}
             </td>
         </tr>
     `).join('');
 }
 
+function updateRequestBadges() {
+    const counts = {
+        Pending: 0,
+        Confirmed: 0,
+        Declined: 0
+    };
+
+    window.mockData.appointmentRequests.forEach(r => {
+        if (counts[r.status] !== undefined) {
+            counts[r.status]++;
+        }
+    });
+
+    // Update badges in tabs
+    const tabs = document.querySelectorAll('.tab-btn');
+    tabs.forEach(tab => {
+        const status = tab.textContent.trim().split(' ')[0];
+        const badge = tab.querySelector('.badge');
+        if (badge) {
+            let count = 0;
+            if (status === 'Pending') count = counts.Pending;
+            if (status === 'Approved') count = counts.Confirmed;
+            if (status === 'Declined') count = counts.Declined;
+            badge.textContent = count;
+        }
+    });
+}
+
 // Global functions for inline onclick
 window.approveAppointment = function (id) {
-    const req = window.mockData.appointmentRequests.find(r => r.id === id);
-    if (req) {
-        req.status = 'Confirmed';
-        alert(`Appointment for ${req.motherName} confirmed!`);
-        renderAppointmentRequests();
+    if (confirm('Are you sure you want to approve this appointment?')) {
+        const req = window.mockData.appointmentRequests.find(r => r.id === id);
+        if (req) {
+            req.status = 'Confirmed';
+
+            // Add Notification
+            window.mockData.notifications.unshift({
+                id: Date.now(),
+                userId: req.motherId,
+                type: 'success',
+                message: `Your appointment for ${req.reason} on ${req.date} has been confirmed.`,
+                time: 'Just now',
+                read: false
+            });
+
+            saveData();
+
+            // Refresh current view
+            const activeTab = document.querySelector('.tab-btn.active');
+            const status = activeTab ? activeTab.textContent.trim().split(' ')[0] : 'Pending';
+            renderAppointmentRequests(status);
+            updateRequestBadges();
+        }
     }
 };
 
-window.declineAppointment = function (id) {
+window.openDeclineModal = function (id) {
+    // Simple prompt for now, can be upgraded to a modal later
+    const reason = prompt("Please enter a reason for declining:");
+    if (reason) {
+        declineAppointment(id, reason);
+    }
+};
+
+window.declineAppointment = function (id, reason) {
     const req = window.mockData.appointmentRequests.find(r => r.id === id);
     if (req) {
         req.status = 'Declined';
-        alert(`Appointment declined.`);
-        renderAppointmentRequests();
+        req.declineReason = reason; // Store reason
+
+        // Add Notification
+        window.mockData.notifications.unshift({
+            id: Date.now(),
+            userId: req.motherId,
+            type: 'critical', // using critical for red color/error style
+            message: `Your appointment request was declined. Reason: ${reason}`,
+            time: 'Just now',
+            read: false
+        });
+
+        saveData();
+
+        // Refresh current view
+        const activeTab = document.querySelector('.tab-btn.active');
+        const status = activeTab ? activeTab.textContent.trim().split(' ')[0] : 'Pending';
+        renderAppointmentRequests(status);
+        updateRequestBadges();
+    }
+};
+
+window.undoAppointment = function (id) {
+    if (confirm('Are you sure you want to revert this request to Pending?')) {
+        const req = window.mockData.appointmentRequests.find(r => r.id === id);
+        if (req) {
+            req.status = 'Pending';
+            delete req.declineReason;
+
+            // Add Notification (Optional, maybe just silent revert or info)
+            window.mockData.notifications.unshift({
+                id: Date.now(),
+                userId: req.motherId,
+                type: 'info',
+                message: `Update on your appointment request for ${req.date}: Status reverted to Pending.`,
+                time: 'Just now',
+                read: false
+            });
+
+            saveData();
+
+            // Refresh current view
+            const activeTab = document.querySelector('.tab-btn.active');
+            const status = activeTab ? activeTab.textContent.trim().split(' ')[0] : 'Pending';
+            renderAppointmentRequests(status);
+            updateRequestBadges();
+        }
     }
 };
 

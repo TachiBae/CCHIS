@@ -9,6 +9,40 @@ const currentUser = {
     role: "Midwife"
 };
 
+// New Authentication Data
+const users = [
+    {
+        id: "D001",
+        username: "Doc Ron",
+        password: "Ninja", // In a real app, this would be hashed
+        role: "doctor",
+        profileId: "D001",
+        verified: true
+    },
+    {
+        id: "M006",
+        username: "Ella Martinez",
+        password: "crepo",
+        role: "mother",
+        profileId: "M006",
+        verified: true
+    }
+];
+
+const doctors = [
+    {
+        id: "D001",
+        name: "Dr. Ron",
+        licenseNumber: "1234567",
+        specialization: "Obstetrics",
+        yearsExperience: 10,
+        contact: "0917-000-0000",
+        email: "doc.ron@cchis.com",
+        affiliation: "Pasig City General Hospital",
+        verified: true
+    }
+];
+
 const mothers = [
     {
         id: "M001",
@@ -313,5 +347,7 @@ window.mockData = {
     immunizations,
     stats,
     attentionItems,
-    appointmentRequests
+    appointmentRequests,
+    users,
+    doctors
 };

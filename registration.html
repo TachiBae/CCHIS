@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - CCHIS</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-card animate-slide-up">
+            <div class="login-logo animate-float">
+                <i class="fas fa-user-plus"></i> Create Account
+                <div style="font-size: 0.9rem; font-weight: normal; color: #666; margin-top: 0.5rem;">Join CCHIS Today
+                </div>
+            </div>
+
+            <form id="registrationForm">
+                <div class="form-group animate-slide-up delay-100">
+                    <label for="reg-username">Username</label>
+                    <input type="text" id="reg-username" class="form-control" placeholder="Choose a unique username"
+                        required>
+                </div>
+
+                <div class="form-group animate-slide-up delay-200">
+                    <label for="reg-password">Password</label>
+                    <input type="password" id="reg-password" class="form-control" placeholder="Minimum 8 characters"
+                        minlength="8" required>
+                </div>
+
+                <div class="form-group animate-slide-up delay-300">
+                    <label for="reg-confirm-password">Confirm Password</label>
+                    <input type="password" id="reg-confirm-password" class="form-control"
+                        placeholder="Re-enter password" required>
+                </div>
+
+                <div class="form-group animate-slide-up delay-400">
+                    <label>Account Type</label>
+                    <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input type="radio" name="accountType" value="mother" checked> Mother / Patient
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input type="radio" name="accountType" value="doctor"> Healthcare Provider
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary animate-slide-up delay-500" style="width: 100%;">Create
+                    Account</button>
+
+                <div class="text-center mt-2 animate-slide-up delay-600">
+                    <a href="index.html" style="color: var(--primary-color); font-size: 0.9rem;">Already have an
+                        account? Login</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/registration.js"></script>
+</body>
+
+</html>

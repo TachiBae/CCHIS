@@ -34,12 +34,16 @@
                     style="width: 100%;">Login</button>
 
                 <div class="text-center mt-2 animate-slide-up delay-400">
-                    <a href="#" style="color: var(--primary-color); font-size: 0.9rem;">Create a new account</a>
+                    <a href="registration.html" style="color: var(--primary-color); font-size: 0.9rem;">Create a new
+                        account</a>
                 </div>
             </form>
         </div>
     </div>
 
+    <!-- Load data first -->
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
     <script>
         document.getElementById('loginForm').addEventListener('submit', function (e) {
             e.preventDefault();
@@ -54,18 +58,28 @@
             btn.disabled = true;
 
             setTimeout(() => {
-                if (usernameInput === "Doc Ron" && passwordInput === "Ninja") {
-                    // Doctor Login
-                    localStorage.setItem('userRole', 'doctor');
-                    localStorage.setItem('userName', 'Dr. Ron');
-                    localStorage.setItem('userId', 'D001');
-                    window.location.href = 'doctor-dashboard.html';
-                } else if (usernameInput === "Ella Martinez" && passwordInput === "crepo") {
-                    // Mother Login
-                    localStorage.setItem('userRole', 'mother');
-                    localStorage.setItem('userName', 'Ella Martinez');
-                    localStorage.setItem('userId', 'M006'); // Assigning a new ID for Ella
-                    window.location.href = 'mother-dashboard.html';
+                // Check against mockData.users
+                const user = window.mockData.users.find(u => u.username === usernameInput && u.password === passwordInput);
+
+                if (user) {
+                    // Check verification for doctors
+                    if (user.role === 'doctor' && !user.verified) {
+                        alert('Your account is pending verification by an administrator.');
+                        btn.innerText = originalText;
+                        btn.disabled = false;
+                        return;
+                    }
+
+                    // Successful Login
+                    localStorage.setItem('userRole', user.role);
+                    localStorage.setItem('userName', user.username); // Or fetch real name from profile
+                    localStorage.setItem('userId', user.profileId);
+
+                    if (user.role === 'doctor') {
+                        window.location.href = 'doctor-dashboard.html';
+                    } else {
+                        window.location.href = 'mother-dashboard.html';
+                    }
                 } else {
                     // Invalid Credentials
                     alert('Invalid username or password');
