@@ -20,6 +20,27 @@ document.addEventListener('DOMContentLoaded', function () {
         // Ensure new data structures exist (migration for old data)
         if (!window.mockData.users) window.mockData.users = [];
         if (!window.mockData.doctors) window.mockData.doctors = [];
+        if (!window.mockData.milestones || window.mockData.milestones.length === 0) {
+            // Initialize with default milestones from data.js if missing
+            const defaultMilestones = [
+                { id: 'M1', name: 'Reacts to loud sounds', ageMonths: 0 },
+                { id: 'M2', name: 'Calms down when spoken to', ageMonths: 0 },
+                { id: 'M3', name: 'Holds head steady', ageMonths: 2 },
+                { id: 'M4', name: 'Follows things with eyes', ageMonths: 2 },
+                { id: 'M5', name: 'Smiles at people', ageMonths: 2 },
+                { id: 'M6', name: 'Reaches for toys', ageMonths: 4 },
+                { id: 'M7', name: 'Rolls over', ageMonths: 4 },
+                { id: 'M8', name: 'Sits without support', ageMonths: 6 },
+                { id: 'M9', name: 'Responds to own name', ageMonths: 6 },
+                { id: 'M10', name: 'Crawls', ageMonths: 9 },
+                { id: 'M11', name: 'Stands while holding on', ageMonths: 9 },
+                { id: 'M12', name: 'Says simple words', ageMonths: 12 }
+            ];
+            window.mockData.milestones = defaultMilestones;
+        }
+        if (!window.mockData.childMilestones) {
+            window.mockData.childMilestones = [];
+        }
         if (!window.mockData.notifications) {
             window.mockData.notifications = [
                 { id: 1, userId: 'M006', type: 'success', message: 'Appointment confirmed', time: '2 hours ago', read: false },
@@ -60,12 +81,17 @@ document.addEventListener('DOMContentLoaded', function () {
             localStorage.removeItem('userRole');
             localStorage.removeItem('userId');
             localStorage.removeItem('userName');
+            localStorage.removeItem('setupUser'); // Also clear registration session
             window.location.href = 'index.html';
         });
     }
 
     // Update User Profile in Sidebar/Top Bar
+    // Update User Profile in Sidebar/Top Bar
     updateUserProfileDisplay();
+
+    // Render Notifications
+    renderNotifications();
 });
 
 function saveData() {
@@ -103,6 +129,73 @@ function renderAttentionPanel() {
     });
 }
 
+function renderNotifications() {
+    const notificationList = document.querySelector('.notification-list');
+    if (!notificationList) return;
+
+    const userId = localStorage.getItem('userId');
+    const userRole = localStorage.getItem('userRole');
+
+    if (!userId || !window.mockData.notifications) return;
+
+    // Filter notifications for current user
+    const userNotifications = window.mockData.notifications.filter(n => {
+        // Match by specific User ID OR by Role (if no specific user ID is set, or if it matches)
+        const roleMatch = n.recipientRole === userRole;
+        const idMatch = n.userId === userId;
+        return idMatch || (roleMatch && !n.userId);
+    });
+
+    // Sort by time (assuming new ones are added to end, so reverse)
+    userNotifications.reverse();
+
+    notificationList.innerHTML = '';
+
+    if (userNotifications.length === 0) {
+        notificationList.innerHTML = '<div class="text-muted text-center" style="padding: 20px;">No new notifications</div>';
+        return;
+    }
+
+    userNotifications.forEach(n => {
+        const item = document.createElement('div');
+        item.className = `notification-item ${n.isRead ? 'read' : 'unread'}`;
+        item.style.display = 'flex';
+        item.style.alignItems = 'start';
+        item.style.padding = '12px';
+        item.style.borderBottom = '1px solid var(--border-color)';
+        item.style.cursor = 'pointer';
+
+        // Icon based on type
+        let iconColor = '#666';
+        if (n.type === 'success') iconColor = 'var(--success-color)';
+        if (n.type === 'warning') iconColor = 'var(--warning-color)';
+        if (n.type === 'error') iconColor = 'var(--error-color)';
+        if (n.type === 'info') iconColor = 'var(--primary-color)';
+
+        item.innerHTML = `
+            <div style="margin-right: 12px; color: ${iconColor}; margin-top: 2px;">
+                <i class="fas fa-${n.icon || 'bell'}"></i>
+            </div>
+            <div style="flex: 1;">
+                <div style="font-size: 14px; font-weight: ${n.isRead ? '400' : '600'}; color: var(--text-primary);">
+                    ${n.message}
+                </div>
+                <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">
+                    ${n.time}
+                </div>
+            </div>
+            ${!n.isRead ? '<div style="width: 8px; height: 8px; background: var(--primary-color); border-radius: 50%; margin-top: 6px;"></div>' : ''}
+        `;
+
+        item.addEventListener('click', () => {
+            // Mark as read logic would go here
+            if (n.actionUrl) window.location.href = n.actionUrl;
+        });
+
+        notificationList.appendChild(item);
+    });
+}
+
 // Helper to format dates
 function formatDate(dateString) {
     if (!dateString) return 'N/A';
@@ -112,19 +205,26 @@ function formatDate(dateString) {
 
 // Profiles Page Logic
 function initProfilesPage() {
-    renderProfilesList(window.mockData.mothers);
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
 
-    // Search functionality
-    const searchInput = document.getElementById('search-profiles');
-    if (searchInput) {
-        searchInput.addEventListener('input', (e) => {
-            const term = e.target.value.toLowerCase();
-            const filtered = window.mockData.mothers.filter(m =>
-                m.name.toLowerCase().includes(term) ||
-                (m.childId && window.mockData.children.find(c => c.id === m.childId).name.toLowerCase().includes(term))
-            );
-            renderProfilesList(filtered);
-        });
+    if (currentPage === 'profiles.html') {
+        // Filter mothers by assigned doctor
+        const currentDoctorId = localStorage.getItem('userId');
+        const assignedMothers = window.mockData.mothers.filter(m => m.assignedDoctorId === currentDoctorId);
+        renderProfilesList(assignedMothers);
+
+        // Search Functionality
+        const searchInput = document.getElementById('search-profiles');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase();
+                const filtered = assignedMothers.filter(m =>
+                    m.name.toLowerCase().includes(term) ||
+                    m.id.toLowerCase().includes(term)
+                );
+                renderProfilesList(filtered);
+            });
+        }
     }
 
     // Modal Close Logic
@@ -164,7 +264,8 @@ function initProfilesPage() {
                 deliveryDate: document.getElementById('np-m-delivery').value || null,
                 status: document.getElementById('np-m-status').value,
                 riskFactors: [], // Simplified for now
-                childId: cId
+                childId: cId,
+                assignedDoctorId: localStorage.getItem('userId') // Assign to current doctor
             };
 
             // Create Child Object (if applicable)
@@ -186,7 +287,10 @@ function initProfilesPage() {
             window.mockData.mothers.push(newMother);
 
             // Refresh UI
-            renderProfilesList(window.mockData.mothers);
+            // Refresh UI with filtered list
+            const currentDoctorId = localStorage.getItem('userId');
+            const assignedMothers = window.mockData.mothers.filter(m => m.assignedDoctorId === currentDoctorId);
+            renderProfilesList(assignedMothers);
 
             // Close and Reset
             document.getElementById('new-profile-modal').classList.remove('show');
@@ -319,6 +423,30 @@ window.openMotherModal = function (motherId) {
 
     historyContainer.innerHTML = historyHTML;
     document.getElementById('mother-modal').classList.add('show');
+
+    // Attach Export Listener
+    const exportBtn = document.getElementById('exportPatientBtn');
+    if (exportBtn) {
+        // Remove old listener to prevent duplicates (cloning is a simple way)
+        const newBtn = exportBtn.cloneNode(true);
+        exportBtn.parentNode.replaceChild(newBtn, exportBtn);
+
+        newBtn.addEventListener('click', function () {
+            const originalText = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Exporting...';
+            this.disabled = true;
+
+            setTimeout(() => {
+                if (window.ExportService) {
+                    window.ExportService.exportPatientToPDF(motherId);
+                } else {
+                    alert('Export service not loaded.');
+                }
+                this.innerHTML = originalText;
+                this.disabled = false;
+            }, 500);
+        });
+    }
 };
 
 window.openChildModal = function (childId) {
@@ -428,7 +556,10 @@ function renderPostpartumTable() {
 
     tbody.innerHTML = '';
 
-    window.mockData.mothers.forEach(mother => {
+    const currentDoctorId = localStorage.getItem('userId');
+    const assignedMothers = window.mockData.mothers.filter(m => m.assignedDoctorId === currentDoctorId);
+
+    assignedMothers.forEach(mother => {
         // Find visits for this mother
         const visits = window.mockData.postpartumVisits.filter(v => v.motherId === mother.id);
 
@@ -500,8 +631,26 @@ window.openVisitModal = function (motherId) {
 // Growth Page Logic
 // Growth Page Logic
 function initGrowthPage() {
+    // Get children of assigned mothers
+    const currentDoctorId = localStorage.getItem('userId');
+    const assignedMothers = window.mockData.mothers.filter(m => m.assignedDoctorId === currentDoctorId);
+    const assignedMotherIds = assignedMothers.map(m => m.id);
+    const assignedChildren = window.mockData.children.filter(c => assignedMotherIds.includes(c.motherId));
+
+    if (assignedChildren.length === 0) {
+        // Handle empty state
+        document.querySelector('.main-content').innerHTML = `
+            <div class="text-center" style="padding: 48px;">
+                <i class="fas fa-child" style="font-size: 48px; color: var(--text-secondary); margin-bottom: 16px;"></i>
+                <h3>No Children Found</h3>
+                <p class="text-muted">You don't have any patients with registered children yet.</p>
+            </div>
+        `;
+        return;
+    }
+
     // Default to first child or use URL param if we had one
-    let currentChildId = window.mockData.children[0].id;
+    let currentChildId = assignedChildren[0].id;
 
     updateGrowthPage(currentChildId);
 
@@ -536,9 +685,19 @@ function updateGrowthPage(childId) {
     // Populate Dropdown (Siblings)
     const selector = document.getElementById('growth-child-select');
     if (selector) {
-        const siblings = window.mockData.children.filter(c => c.motherId === child.motherId);
+        // Filter siblings to only those assigned to this doctor (though siblings usually share a mother, so implicit)
+        // But for the dropdown list, we might want to show ALL assigned children, not just siblings?
+        // The original code showed siblings. Let's stick to siblings for now, but we need to make sure
+        // we can switch to ANY assigned child.
+        // Actually, the original code was "siblings". If I want to switch between ANY patient, 
+        // I should list all assigned children.
 
-        if (siblings.length <= 1) {
+        const currentDoctorId = localStorage.getItem('userId');
+        const assignedMothers = window.mockData.mothers.filter(m => m.assignedDoctorId === currentDoctorId);
+        const assignedMotherIds = assignedMothers.map(m => m.id);
+        const allAssignedChildren = window.mockData.children.filter(c => assignedMotherIds.includes(c.motherId));
+
+        if (allAssignedChildren.length <= 1) {
             selector.parentElement.style.display = 'none'; // Hide if no siblings
         } else {
             selector.parentElement.style.display = 'block';
@@ -722,33 +881,60 @@ function renderReportCharts() {
     });
 }
 
-// Initialize based on page
 // Access Control
 function checkAccess() {
-    const currentPage = window.location.pathname.split('/').pop();
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     const userRole = localStorage.getItem('userRole');
 
-    // Public pages
-    if (currentPage === 'index.html' || currentPage === '') return;
+    // Public pages (no authentication required)
+    const publicPages = ['index.html', 'registration.html', ''];
+    if (publicPages.includes(currentPage)) return;
+
+    // Semi-public pages (accessible during registration flow)
+    if (currentPage === 'profile-setup.html') {
+        // Check if user has a setup session
+        const setupUser = localStorage.getItem('setupUser');
+        if (!setupUser) {
+            window.location.href = 'registration.html';
+        }
+        return;
+    }
 
     if (!userRole) {
-        // Not logged in
+        // Not logged in - redirect to login
         window.location.href = 'index.html';
         return;
     }
 
     // Doctor Pages
-    const doctorPages = ['doctor-dashboard.html', 'profiles.html', 'postpartum.html', 'growth.html', 'reports.html', 'appointment-requests.html'];
-    if (userRole === 'doctor' && !doctorPages.includes(currentPage)) {
-        // Doctor trying to access mother pages? (None yet, but good to have)
-        // For now, just let them be or redirect to doctor dashboard if they try to go to mother dashboard
-        if (currentPage.includes('mother') || currentPage.includes('my-')) {
+    const doctorPages = [
+        'doctor-dashboard.html',
+        'profiles.html',
+        'postpartum.html',
+        'growth.html',
+        'reports.html',
+        'appointment-requests.html',
+        'doctor-profile.html'
+    ];
+
+    // Mother Pages
+    const motherPages = [
+        'mother-dashboard.html',
+        'my-profile.html',
+        'my-child.html',
+        'my-appointments.html',
+        'medical-history.html',
+        'my-records.html',
+        'contact-worker.html'
+    ];
+
+    if (userRole === 'doctor') {
+        if (motherPages.includes(currentPage)) {
+            // Doctor trying to access mother pages
             window.location.href = 'doctor-dashboard.html';
         }
     }
 
-    // Mother Pages
-    const motherPages = ['mother-dashboard.html', 'my-profile.html', 'my-child.html', 'my-appointments.html', 'my-records.html'];
     if (userRole === 'mother') {
         if (doctorPages.includes(currentPage)) {
             // Mother trying to access doctor pages
@@ -761,27 +947,25 @@ function updateUserProfileDisplay() {
     const userName = localStorage.getItem('userName');
     const userRole = localStorage.getItem('userRole');
 
-    // Update sidebar/topbar if elements exist
-    // This assumes the HTML structure has specific classes or IDs. 
-    // The current HTML has static "Dr. Maria Clara". We should make it dynamic.
-
-    const nameEls = document.querySelectorAll('.user-profile .font-weight-600, .user-profile div:first-child');
-    const roleEls = document.querySelectorAll('.user-profile .text-muted, .user-profile div:last-child');
-
     if (userName) {
-        nameEls.forEach(el => {
-            if (el.textContent.includes('Dr.') || el.textContent.includes('Midwife')) return; // Don't overwrite if it's not the right target, but structure is loose.
-            // Let's target more specifically if possible, or just overwrite the text node
-            el.textContent = userName;
-        });
+        // For doctor dashboard top bar - target the name element
+        const topBarName = document.querySelector('.user-nav div[style*="font-weight: 600"]');
+        if (topBarName) {
+            topBarName.textContent = userName;
+        }
 
-        // Better selector based on view_file output:
-        // <div style="font-weight: 600;">Dr. Maria Clara</div>
+        // For mother dashboard sidebar or other elements with .user-profile class
         const profileName = document.querySelector('.user-profile div[style*="font-weight: 600"]');
-        if (profileName) profileName.textContent = userName;
+        if (profileName) {
+            profileName.textContent = userName;
+        }
 
-        const profileRole = document.querySelector('.user-profile div[style*="font-size: 0.8rem"]');
-        if (profileRole) profileRole.textContent = userRole === 'doctor' ? 'Healthcare Provider' : 'Mother';
+        // Update role display
+        const roleElement = document.querySelector('.user-nav div[style*="font-size: 11px"]') ||
+            document.querySelector('.user-profile div[style*="font-size: 0.8rem"]');
+        if (roleElement) {
+            roleElement.textContent = userRole === 'doctor' ? 'Healthcare Provider' : 'Mother';
+        }
     }
 }
 
@@ -798,6 +982,8 @@ document.addEventListener('DOMContentLoaded', function () {
         initReportsPage();
     } else if (currentPage === 'appointment-requests.html') {
         initAppointmentRequestsPage();
+    } else if (currentPage === 'doctor-dashboard.html') {
+        initDoctorDashboard();
     } else if (currentPage === 'mother-dashboard.html') {
         initMotherDashboard();
     } else if (currentPage === 'my-profile.html') {
@@ -811,19 +997,32 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+// Doctor's Interface Functions
+
+function initDoctorDashboard() {
+    // Update user profile display
+    updateUserProfileDisplay();
+}
+
 // Mother's Interface Functions
 
 function initMotherDashboard() {
     const userId = localStorage.getItem('userId'); // e.g., M006
     if (!userId) return;
 
+    // Update user profile display
+    updateUserProfileDisplay();
+
     // Find mother data
     const mother = window.mockData.mothers.find(m => m.id === userId);
     if (!mother) return;
 
     // Update Welcome Message
+    const userName = localStorage.getItem('userName');
     const welcomeMsg = document.querySelector('h3[style*="color: #d63384"]');
-    if (welcomeMsg) welcomeMsg.textContent = `Welcome back, ${mother.name.split(' ')[0]}!`;
+    if (welcomeMsg && userName) {
+        welcomeMsg.textContent = `Welcome back, ${userName}! 👋`;
+    }
 
     // Update Stats (Mock logic)
     // Next Appt
@@ -1230,14 +1429,25 @@ function renderAppointmentRequests(status = 'Pending') {
     let dataStatus = status;
     if (status === 'Approved') dataStatus = 'Confirmed';
 
-    const filtered = window.mockData.appointmentRequests.filter(r => r.status === dataStatus);
+    tbody.innerHTML = ''; // Clear existing content
 
-    if (filtered.length === 0) {
+    const currentDoctorId = localStorage.getItem('userId');
+    const assignedMothers = window.mockData.mothers.filter(m => m.assignedDoctorId === currentDoctorId);
+    const assignedMotherIds = assignedMothers.map(m => m.id);
+
+    const filteredRequests = window.mockData.appointmentRequests.filter(r => {
+        // Filter by status
+        if (dataStatus !== 'All' && r.status !== dataStatus) return false;
+        // Filter by assigned doctor
+        return assignedMotherIds.includes(r.motherId);
+    });
+
+    if (filteredRequests.length === 0) {
         tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted">No ${status.toLowerCase()} requests found</td></tr>`;
         return;
     }
 
-    tbody.innerHTML = filtered.map(r => `
+    tbody.innerHTML = filteredRequests.map(r => `
         <tr>
             <td>
                 <div class="d-flex align-center">

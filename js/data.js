@@ -62,7 +62,8 @@ const mothers = [
         deliveryDate: "2023-12-10",
         status: "Normal",
         riskFactors: [],
-        childId: "C001"
+        childId: "C001",
+        assignedDoctorId: "D001"
     },
     {
         id: "M002",
@@ -82,7 +83,8 @@ const mothers = [
         deliveryDate: "2023-11-18",
         status: "High Risk",
         riskFactors: ["History of Preeclampsia", "Postpartum Depression Risk"],
-        childId: "C002"
+        childId: "C002",
+        assignedDoctorId: "D001"
     },
     {
         id: "M003",
@@ -102,7 +104,8 @@ const mothers = [
         deliveryDate: null,
         status: "Normal",
         riskFactors: [],
-        childId: null
+        childId: null,
+        assignedDoctorId: "D001"
     },
     {
         id: "M004",
@@ -122,7 +125,8 @@ const mothers = [
         deliveryDate: "2023-10-25",
         status: "Critical",
         riskFactors: ["Anemia", "Hypertension"],
-        childId: "C004"
+        childId: "C004",
+        assignedDoctorId: "D001"
     },
     {
         id: "M005",
@@ -142,7 +146,8 @@ const mothers = [
         deliveryDate: "2023-11-12",
         status: "Normal",
         riskFactors: ["Advanced Maternal Age"],
-        childId: "C005"
+        childId: "C005",
+        assignedDoctorId: "D001"
     },
     {
         id: "M006",
@@ -162,7 +167,8 @@ const mothers = [
         deliveryDate: "2023-12-12",
         status: "Normal",
         riskFactors: [],
-        childId: "C006"
+        childId: "C006",
+        assignedDoctorId: "D001"
     }
 ];
 
@@ -325,6 +331,60 @@ const attentionItems = [
     { text: "Ana Reyes - High-risk mental health screening", type: "critical" }
 ];
 
+// Milestones data structure
+const milestones = [
+    // Standard developmental milestones (can be checked off as baby achieves them)
+    { id: 'M1', name: 'Reacts to loud sounds', ageMonths: 0 },
+    { id: 'M2', name: 'Calms down when spoken to', ageMonths: 0 },
+    { id: 'M3', name: 'Holds head steady', ageMonths: 2 },
+    { id: 'M4', name: 'Follows things with eyes', ageMonths: 2 },
+    { id: 'M5', name: 'Smiles at people', ageMonths: 2 },
+    { id: 'M6', name: 'Reaches for toys', ageMonths: 4 },
+    { id: 'M7', name: 'Rolls over', ageMonths: 4 },
+    { id: 'M8', name: 'Sits without support', ageMonths: 6 },
+    { id: 'M9', name: 'Responds to own name', ageMonths: 6 },
+    { id: 'M10', name: 'Crawls', ageMonths: 9 },
+    { id: 'M11', name: 'Stands while holding on', ageMonths: 9 },
+    { id: 'M12', name: 'Says simple words', ageMonths: 12 }
+];
+
+// Child milestones tracking (which milestones each child has achieved)
+const childMilestones = [
+    // Example: { childId: 'C001', milestoneId: 'M1', achievedDate: '2023-12-15' }
+];
+
+// Mother's Medical History Data
+const motherMedicalHistory = [
+    // Example structure (will be populated by users)
+    /*
+    {
+        motherId: "M001",
+        personalHistory: {
+            anxiety: false, arthritis: false, depression: false, migraine: false,
+            asthma: false, diabetes: false, heartDisease: false, seizures: false,
+            highBloodPressure: false, noConditions: false, other: ""
+        },
+        familyHistory: {
+            cancer: false, diabetes: false, heartDisease: false, stroke: false,
+            mentalHealth: false, other: ""
+        },
+        motherMedications: "",
+        motherAllergies: { hasAllergies: false, list: "" },
+        childMedications: "",
+        childAllergies: { hasAllergies: false, list: "" },
+        vaccinations: [
+            { vaccine: "Flu", dateAdministered: "", nextDueDate: "" },
+            { vaccine: "Shingles", dateAdministered: "", nextDueDate: "" },
+            { vaccine: "Pneumococcal Vaccine", dateAdministered: "", nextDueDate: "" },
+            { vaccine: "COVID 19", dateAdministered: "", nextDueDate: "" }
+        ],
+        checkupHistory: [
+            // { purpose: "", date: "", doctorSignature: "" }
+        ]
+    }
+    */
+];
+
 const appointmentRequests = [
     {
         id: "R001",
@@ -338,6 +398,13 @@ const appointmentRequests = [
     }
 ];
 
+const contactRequests = [];
+const notifications = [
+    { id: 1, text: "Upcoming appointment on Jan 10", date: "2023-12-01", read: false },
+    { id: 2, text: "Vaccination due: Pentavalent 1", date: "2023-12-05", read: false },
+    { id: 3, text: "New health tip available", date: "2023-11-28", read: true }
+];
+
 // Export data globally
 window.mockData = {
     currentUser,
@@ -348,6 +415,11 @@ window.mockData = {
     stats,
     attentionItems,
     appointmentRequests,
+    contactRequests,
+    notifications,
     users,
-    doctors
+    doctors,
+    milestones,
+    childMilestones,
+    motherMedicalHistory
 };

@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const role = setupUser.role;
     let currentStep = 1;
-    const totalSteps = role === 'mother' ? 4 : 2;
+    const totalSteps = role === 'mother' ? 4 : 1;
 
     // State object to store form data
     const profileData = {
@@ -135,8 +135,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     </div>
                     <div class="row" style="display: flex; gap: 1rem;">
                         <div class="form-group" style="flex: 1;">
-                            <label>Gravida (Pregnancies)</label>
-                            <input type="number" id="m-gravida" class="form-control" value="${profileData.medical.gravida || '1'}">
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" id="m-pregnant" style="width: 20px; height: 20px; accent-color: var(--primary-color);" ${profileData.medical.pregnant ? 'checked' : ''}>
+                                <span style="font-weight: 600;">Currently Pregnant?</span>
+                            </label>
+                            <div id="pregnant-message" style="display: ${profileData.medical.pregnant ? 'block' : 'none'}; margin-top: 12px; padding: 12px; background: #d4edda; color: #155724; border-radius: 8px; border: 1px solid #c3e6cb;">
+                                <i class="fas fa-check-circle"></i> Please wait for further updates.
+                            </div>
                         </div>
                         <div class="form-group" style="flex: 1;">
                             <label>Para (Live Births)</label>
@@ -195,12 +200,32 @@ document.addEventListener('DOMContentLoaded', function () {
                         </div>
                         <div class="row" style="display: flex; gap: 1rem;">
                             <div class="form-group" style="flex: 1;">
-                                <label>Birth Weight (kg)*</label>
-                                <input type="number" step="0.1" id="c-weight" class="form-control" value="${profileData.child.weight || ''}">
-                            </div>
-                            <div class="form-group" style="flex: 1;">
-                                <label>Birth Length (cm)*</label>
-                                <input type="number" step="0.1" id="c-length" class="form-control" value="${profileData.child.length || ''}">
+                                <label style="font-weight: 600; margin-bottom: 12px; display: block;">Vaccination History</label>
+                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                        <input type="checkbox" id="v-polio" class="vaccine-checkbox" style="width: 18px; height: 18px; accent-color: var(--success-color);" ${profileData.child.vaccines?.polio ? 'checked' : ''}>
+                                        <span>Polio</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                        <input type="checkbox" id="v-mmr" class="vaccine-checkbox" style="width: 18px; height: 18px; accent-color: var(--success-color);" ${profileData.child.vaccines?.mmr ? 'checked' : ''}>
+                                        <span>MMR (Measles, Mumps, Rubella)</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                        <input type="checkbox" id="v-hepatitis" class="vaccine-checkbox" style="width: 18px; height: 18px; accent-color: var(--success-color);" ${profileData.child.vaccines?.hepatitisB ? 'checked' : ''}>
+                                        <span>Hepatitis B</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                        <input type="checkbox" id="v-pcv" class="vaccine-checkbox" style="width: 18px; height: 18px; accent-color: var(--success-color);" ${profileData.child.vaccines?.pcv ? 'checked' : ''}>
+                                        <span>PCV (Pneumococcal)</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                        <input type="checkbox" id="v-dtap" class="vaccine-checkbox" style="width: 18px; height: 18px; accent-color: var(--success-color);" ${profileData.child.vaccines?.dtap ? 'checked' : ''}>
+                                        <span>DTaP (Diphtheria, Tetanus, Pertussis)</span>
+                                    </label>
+                                </div>
+                                <div id="vaccine-message" style="display: none; margin-top: 12px; padding: 12px; background: #d4edda; color: #155724; border-radius: 8px; border: 1px solid #c3e6cb;">
+                                    <i class="fas fa-check-circle"></i> Please wait for further updates.
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -217,6 +242,37 @@ document.addEventListener('DOMContentLoaded', function () {
                 const ageDate = new Date(ageDiff);
                 document.getElementById('m-age').value = Math.abs(ageDate.getUTCFullYear() - 1970);
             });
+        } else if (step === 2) {
+            // Pregnant checkbox listener
+            const pregnantCheckbox = document.getElementById('m-pregnant');
+            if (pregnantCheckbox) {
+                pregnantCheckbox.addEventListener('change', function () {
+                    const message = document.getElementById('pregnant-message');
+                    message.style.display = this.checked ? 'block' : 'none';
+                });
+            }
+        } else if (step === 4) {
+            // Vaccine checkboxes listener
+            const vaccineCheckboxes = document.querySelectorAll('.vaccine-checkbox');
+            const checkAllFilled = () => {
+                const nameField = document.getElementById('c-name');
+                const dobField = document.getElementById('c-dob');
+                const allChecked = Array.from(vaccineCheckboxes).every(cb => cb.checked);
+                const allFieldsFilled = nameField.value && dobField.value && allChecked;
+
+                const message = document.getElementById('vaccine-message');
+                message.style.display = allFieldsFilled ? 'block' : 'none';
+            };
+
+            vaccineCheckboxes.forEach(cb => {
+                cb.addEventListener('change', checkAllFilled);
+            });
+
+            // Also listen to name and dob fields
+            const nameField = document.getElementById('c-name');
+            const dobField = document.getElementById('c-dob');
+            if (nameField) nameField.addEventListener('input', checkAllFilled);
+            if (dobField) dobField.addEventListener('change', checkAllFilled);
         }
     }
 
@@ -283,7 +339,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } else if (step === 2) {
                 profileData.medical = {
                     bloodType: document.getElementById('m-blood').value,
-                    gravida: document.getElementById('m-gravida').value,
+                    pregnant: document.getElementById('m-pregnant').checked,
                     para: document.getElementById('m-para').value
                 };
             } else if (step === 3) {
@@ -317,18 +373,48 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (hasChild) {
                 childId = 'C' + (window.mockData.children.length + 1).toString().padStart(3, '0');
+
+                // Get vaccine status
+                const vaccines = {
+                    polio: document.getElementById('v-polio').checked,
+                    mmr: document.getElementById('v-mmr').checked,
+                    hepatitisB: document.getElementById('v-hepatitis').checked,
+                    pcv: document.getElementById('v-pcv').checked,
+                    dtap: document.getElementById('v-dtap').checked
+                };
+
                 const newChild = {
                     id: childId,
                     motherId: setupUser.profileId,
                     name: document.getElementById('c-name').value,
                     sex: document.getElementById('c-sex').value,
                     birthDate: document.getElementById('c-dob').value,
-                    birthWeight: parseFloat(document.getElementById('c-weight').value),
-                    birthLength: parseFloat(document.getElementById('c-length').value),
-                    bloodType: "Unknown", // Not in form yet
+                    birthWeight: 0, // Removed from form
+                    birthLength: 0, // Removed from form
+                    bloodType: "Unknown",
                     status: "Normal"
                 };
                 window.mockData.children.push(newChild);
+
+                // Save Immunizations
+                const vaccineList = [
+                    { key: 'polio', name: 'Polio' },
+                    { key: 'mmr', name: 'MMR' },
+                    { key: 'hepatitisB', name: 'Hepatitis B' },
+                    { key: 'pcv', name: 'PCV' },
+                    { key: 'dtap', name: 'DTaP' }
+                ];
+
+                vaccineList.forEach(v => {
+                    if (vaccines[v.key]) {
+                        window.mockData.immunizations.push({
+                            childId: childId,
+                            vaccine: v.name,
+                            dateGiven: new Date().toISOString().split('T')[0], // Assume given today/previously
+                            status: "Completed"
+                        });
+                    }
+                });
             }
 
             // Create Mother Profile
@@ -344,7 +430,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 address: profileData.personal.address,
                 emergencyContact: "N/A", // Add field later
                 education: "N/A", // Add field later
-                gravida: parseInt(profileData.medical.gravida),
+                gravida: profileData.medical.pregnant ? "Pregnant" : "Not Pregnant",
                 para: parseInt(profileData.medical.para),
                 edd: null, // Calculated?
                 deliveryDate: profileData.postpartum.deliveryDate,
@@ -360,7 +446,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Login
             localStorage.setItem('userRole', 'mother');
-            localStorage.setItem('userName', newMother.name);
+            localStorage.setItem('userName', setupUser.username); // Store username
             localStorage.setItem('userId', newMother.id);
 
             alert("Profile Setup Complete!");
@@ -377,14 +463,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 contact: "N/A", // Add field
                 email: "N/A", // Add field
                 affiliation: profileData.professional.hospital,
-                verified: false
+                affiliation: profileData.professional.hospital,
+                verified: true
             };
 
             window.mockData.doctors.push(newDoctor);
             localStorage.setItem('cchisData', JSON.stringify(window.mockData));
 
-            alert("Profile submitted for verification. Please wait for admin approval.");
-            window.location.href = 'index.html';
+            // Auto-login for doctor
+            localStorage.setItem('userRole', 'doctor');
+            localStorage.setItem('userName', setupUser.username);
+            localStorage.setItem('userId', newDoctor.id);
+
+            alert("Profile Setup Complete!");
+            window.location.href = 'doctor-dashboard.html';
         }
     }
 });

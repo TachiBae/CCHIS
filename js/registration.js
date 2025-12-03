@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 password: password, // In real app, hash this
                 role: accountType,
                 profileId: newUserId,
-                verified: accountType === 'mother' // Doctors need verification
+                verified: true // Auto-verify all accounts including doctors
             };
 
             // Add to Users Array

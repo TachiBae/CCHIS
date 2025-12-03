@@ -63,16 +63,12 @@
 
                 if (user) {
                     // Check verification for doctors
-                    if (user.role === 'doctor' && !user.verified) {
-                        alert('Your account is pending verification by an administrator.');
-                        btn.innerText = originalText;
-                        btn.disabled = false;
-                        return;
-                    }
+                    // Check verification for doctors - REMOVED
+                    // if (user.role === 'doctor' && !user.verified) { ... }
 
-                    // Successful Login
+                    // Successful Login - Store username as display name
                     localStorage.setItem('userRole', user.role);
-                    localStorage.setItem('userName', user.username); // Or fetch real name from profile
+                    localStorage.setItem('userName', user.username); // Use the account username
                     localStorage.setItem('userId', user.profileId);
 
                     if (user.role === 'doctor') {

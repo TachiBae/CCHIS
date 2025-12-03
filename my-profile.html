@@ -33,13 +33,16 @@
             <a href="my-appointments.html" class="menu-item">
                 <i class="fas fa-calendar-alt"></i> My Appointments
             </a>
+            <a href="medical-history.html" class="menu-item">
+                <i class="fas fa-file-medical"></i> Medical History
+            </a>
             <a href="my-records.html" class="menu-item">
-                <i class="fas fa-file-medical"></i> Medical Records
+                <i class="fas fa-folder-open"></i> Medical Records
             </a>
             <a href="#" class="menu-item">
                 <i class="fas fa-book-medical"></i> Health Resources
             </a>
-            <a href="#" class="menu-item">
+            <a href="contact-worker.html" class="menu-item">
                 <i class="fas fa-comment-medical"></i> Contact Health Worker
             </a>
             <a href="index.html" class="menu-item" style="margin-top: auto; color: var(--error-color);">
@@ -146,6 +149,70 @@
 
     <script src="js/data.js"></script>
     <script src="js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const userId = localStorage.getItem('userId');
+            if (!userId) return;
+
+            // Find mother data
+            const mother = window.mockData.mothers.find(m => m.id === userId);
+            if (!mother) return;
+
+            // Update Profile Header
+            document.querySelector('.card h2').textContent = mother.name;
+            document.querySelector('.card .text-muted').textContent = 'Mother'; // Could be dynamic if needed
+
+            // Initials
+            const initials = mother.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+            document.querySelector('.card div[style*="border-radius: 50%"]').textContent = initials;
+
+            // Update Personal Info
+            const personalInfo = document.querySelectorAll('.grid-2-col')[0];
+            if (personalInfo) {
+                const divs = personalInfo.querySelectorAll('div > div[style*="font-weight: 600"]');
+                if (divs.length >= 4) {
+                    divs[0].textContent = mother.name;
+                    divs[1].textContent = `${new Date(mother.dob).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} (${mother.age} yrs)`;
+                    divs[2].textContent = mother.civilStatus;
+                    divs[3].textContent = mother.occupation;
+                }
+            }
+
+            // Update Contact Info
+            const contactInfo = document.querySelectorAll('.grid-2-col')[1];
+            if (contactInfo) {
+                const divs = contactInfo.querySelectorAll('div > div[style*="font-weight: 600"]');
+                if (divs.length >= 3) {
+                    divs[0].textContent = mother.contact;
+                    divs[1].textContent = mother.email;
+                    divs[2].textContent = mother.address;
+                }
+            }
+
+            // Update Emergency Contact
+            const emergencyInfo = document.querySelectorAll('.grid-2-col')[2];
+            if (emergencyInfo) {
+                const divs = emergencyInfo.querySelectorAll('div > div[style*="font-weight: 600"]');
+                // Parse emergency contact string if it follows "Name (Relation) - Number" format
+                // Or just display raw if structure varies. 
+                // Mock data format: "Juan Santos (Husband) - 0917-111-2222"
+                if (divs.length >= 3) {
+                    const parts = mother.emergencyContact.split(' - ');
+                    const nameRel = parts[0] || mother.emergencyContact;
+                    const phone = parts[1] || 'N/A';
+
+                    // Try to extract relation from parenthesis
+                    const relationMatch = nameRel.match(/\(([^)]+)\)/);
+                    const relation = relationMatch ? relationMatch[1] : 'N/A';
+                    const name = nameRel.replace(/\s*\([^)]+\)/, '').trim();
+
+                    divs[0].textContent = name;
+                    divs[1].textContent = relation;
+                    divs[2].textContent = phone;
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>

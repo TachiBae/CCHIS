@@ -33,13 +33,16 @@
             <a href="my-appointments.html" class="menu-item">
                 <i class="fas fa-calendar-alt"></i> My Appointments
             </a>
+            <a href="medical-history.html" class="menu-item">
+                <i class="fas fa-file-medical"></i> Medical History
+            </a>
             <a href="my-records.html" class="menu-item">
-                <i class="fas fa-file-medical"></i> Medical Records
+                <i class="fas fa-folder-open"></i> Medical Records
             </a>
             <a href="#" class="menu-item">
                 <i class="fas fa-book-medical"></i> Health Resources
             </a>
-            <a href="#" class="menu-item">
+            <a href="contact-worker.html" class="menu-item">
                 <i class="fas fa-comment-medical"></i> Contact Health Worker
             </a>
             <a href="index.html" class="menu-item" style="margin-top: auto; color: var(--error-color);">
@@ -56,7 +59,12 @@
                 <h1>Welcome back, Ella! 👋</h1>
                 <p class="text-muted" style="font-size: 16px;">Good morning! Here's your health overview</p>
             </div>
-            <a href="index.html" class="btn btn-text">Logout</a>
+            <div style="display: flex; gap: 12px; align-items: center;">
+                <button id="downloadRecordsBtn" class="btn btn-outline" style="background: white;">
+                    <i class="fas fa-file-download"></i> Download Records
+                </button>
+                <a href="index.html" class="btn btn-text">Logout</a>
+            </div>
         </div>
 
         <!-- Quick Stats Cards (2x2 Grid) -->
@@ -235,31 +243,8 @@
                         <a href="#" class="text-small" style="color: var(--primary-color);">View All</a>
                     </div>
 
-                    <div style="display: flex; flex-direction: column; gap: 16px;">
-                        <div style="display: flex; gap: 12px; align-items: flex-start;">
-                            <div style="color: var(--success-color); margin-top: 2px;"><i
-                                    class="fas fa-check-circle"></i></div>
-                            <div>
-                                <div style="font-size: 14px;">Appointment confirmed</div>
-                                <div class="text-small text-muted">2 hours ago</div>
-                            </div>
-                        </div>
-                        <div style="display: flex; gap: 12px; align-items: flex-start;">
-                            <div style="color: var(--warning-color); margin-top: 2px;"><i
-                                    class="fas fa-exclamation-circle"></i></div>
-                            <div>
-                                <div style="font-size: 14px;">Vaccine due in 3 days</div>
-                                <div class="text-small text-muted">Today</div>
-                            </div>
-                        </div>
-                        <div style="display: flex; gap: 12px; align-items: flex-start;">
-                            <div style="color: var(--primary-color); margin-top: 2px;"><i
-                                    class="fas fa-info-circle"></i></div>
-                            <div>
-                                <div style="font-size: 14px;">New health tip available</div>
-                                <div class="text-small text-muted">Yesterday</div>
-                            </div>
-                        </div>
+                    <div class="notification-list" style="display: flex; flex-direction: column; gap: 0;">
+                        <!-- Notifications will be loaded here -->
                     </div>
                 </div>
             </div>
@@ -268,6 +253,80 @@
 
     <script src="js/data.js"></script>
     <script src="js/script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script src="js/export-service.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const userId = localStorage.getItem('userId');
+            if (!userId) return;
+
+            // Export Handler
+            const exportBtn = document.getElementById('downloadRecordsBtn');
+            if (exportBtn) {
+                exportBtn.addEventListener('click', function () {
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+                    this.disabled = true;
+
+                    setTimeout(() => {
+                        if (window.ExportService) {
+                            window.ExportService.exportPatientToPDF(userId);
+                        } else {
+                            alert('Export service not loaded.');
+                        }
+                        this.innerHTML = originalText;
+                        this.disabled = false;
+                    }, 500);
+                });
+            }
+
+            // Find mother data
+            const mother = window.mockData.mothers.find(m => m.id === userId);
+            if (!mother) return;
+
+            // Update Welcome Message
+            // Extract first name
+            const firstName = mother.name.split(' ')[0];
+            document.querySelector('.dashboard-header h1').textContent = `Welcome back, ${firstName}! 👋`;
+
+            // Find child data
+            // In mock data, mother has childId, or we search children array
+            let child = null;
+            if (mother.childId) {
+                child = window.mockData.children.find(c => c.id === mother.childId);
+            } else {
+                // Fallback search by motherId
+                child = window.mockData.children.find(c => c.motherId === userId);
+            }
+
+            if (child) {
+                // Update Child Section Header
+                const childHeader = document.querySelector('.card h3:nth-of-type(1)'); // "Baby Martinez's Progress"
+                // Need to be specific selector
+                const childSectionTitle = Array.from(document.querySelectorAll('h3')).find(el => el.textContent.includes('Progress'));
+                if (childSectionTitle) {
+                    childSectionTitle.textContent = `${child.name}'s Progress`;
+                }
+
+                // Update Child Stats
+                const statsGrid = document.querySelector('.grid-2-col'); // Inside child card
+                if (statsGrid) {
+                    const weightHeightDiv = statsGrid.querySelectorAll('div > div[style*="font-weight: 600"]')[1];
+                    if (weightHeightDiv) {
+                        // Use birth weight/length if current not available, or mock current
+                        // For now, let's use what's in child object or fallback
+                        const weight = child.currentWeight || child.birthWeight || '4.2';
+                        const height = child.currentHeight || child.birthLength || '52';
+                        weightHeightDiv.textContent = `${weight} kg / ${height} cm`;
+                    }
+                }
+            } else {
+                // Hide child section or show "Register Child"
+                // For now, just leave default or hide
+            }
+        });
+    </script>
 </body>
 
 </html>

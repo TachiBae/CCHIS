@@ -33,13 +33,16 @@
             <a href="my-appointments.html" class="menu-item">
                 <i class="fas fa-calendar-alt"></i> My Appointments
             </a>
+            <a href="medical-history.html" class="menu-item">
+                <i class="fas fa-file-medical"></i> Medical History
+            </a>
             <a href="my-records.html" class="menu-item active">
-                <i class="fas fa-file-medical"></i> Medical Records
+                <i class="fas fa-folder-open"></i> Medical Records
             </a>
             <a href="#" class="menu-item">
                 <i class="fas fa-book-medical"></i> Health Resources
             </a>
-            <a href="#" class="menu-item">
+            <a href="contact-worker.html" class="menu-item">
                 <i class="fas fa-comment-medical"></i> Contact Health Worker
             </a>
             <a href="index.html" class="menu-item" style="margin-top: auto; color: var(--error-color);">
@@ -144,8 +147,39 @@
         </div>
     </main>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
     <script src="js/data.js"></script>
+    <script src="js/export-service.js"></script>
     <script src="js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Attach export functionality
+            const downloadBtn = document.querySelector('.btn-outline');
+            if (downloadBtn) {
+                downloadBtn.addEventListener('click', function () {
+                    const userId = localStorage.getItem('userId');
+                    if (userId) {
+                        // Change button state
+                        const originalText = this.innerHTML;
+                        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+                        this.disabled = true;
+
+                        // Generate PDF
+                        setTimeout(() => {
+                            ExportService.generateMedicalRecordPDF(userId);
+
+                            // Reset button
+                            this.innerHTML = originalText;
+                            this.disabled = false;
+                        }, 500);
+                    } else {
+                        alert('Please log in to download records.');
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

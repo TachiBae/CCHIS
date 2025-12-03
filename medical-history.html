@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical History - CCHIS</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/mother-theme.css">
+    <style>
+        .form-section {
+            background: white;
+            padding: 24px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 24px;
+        }
+
+        .section-header {
+            background: #E3F2FD;
+            color: #1565C0;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 16px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        th {
+            background: #F8F9FA;
+            font-weight: 600;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .input-line {
+            border: none;
+            border-bottom: 1px solid var(--border-color);
+            width: 100%;
+            padding: 4px 0;
+            outline: none;
+        }
+
+        .input-line:focus {
+            border-bottom-color: var(--primary-color);
+        }
+
+        .btn-toolbar {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-bottom: 24px;
+        }
+
+        .print-only {
+            display: none;
+        }
+
+        @media print {
+
+            .sidebar,
+            .btn-toolbar,
+            .dashboard-header p,
+            .dashboard-header .btn-toolbar {
+                display: none !important;
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+                width: 100% !important;
+                padding: 0 !important;
+            }
+
+            .form-section {
+                box-shadow: none !important;
+                border: 1px solid #ddd !important;
+                break-inside: avoid;
+            }
+
+            .print-only {
+                display: block !important;
+            }
+
+            body {
+                background: white;
+                padding: 20px;
+            }
+
+            .dashboard-header h1 {
+                display: none;
+                /* Hide default header, use print header */
+            }
+
+            /* Ensure inputs show their values */
+            input[type="text"],
+            input[type="date"],
+            textarea {
+                border: none;
+                border-bottom: 1px solid #000;
+                background: transparent;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-brand"><i class="fas fa-heartbeat"></i> CCHIS</div>
+        </div>
+        <div class="sidebar-menu">
+            <a href="mother-dashboard.html" class="menu-item">
+                <i class="fas fa-home"></i> My Dashboard
+            </a>
+            <a href="my-profile.html" class="menu-item">
+                <i class="fas fa-user"></i> My Profile
+            </a>
+            <a href="my-child.html" class="menu-item">
+                <i class="fas fa-baby"></i> My Child
+            </a>
+            <a href="my-appointments.html" class="menu-item">
+                <i class="fas fa-calendar-alt"></i> My Appointments
+            </a>
+            <a href="medical-history.html" class="menu-item active">
+                <i class="fas fa-file-medical"></i> Medical History
+            </a>
+            <a href="my-records.html" class="menu-item">
+                <i class="fas fa-folder-open"></i> Medical Records
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-book-medical"></i> Health Resources
+            </a>
+            <a href="contact-worker.html" class="menu-item">
+                <i class="fas fa-comment-medical"></i> Contact Health Worker
+            </a>
+            <a href="index.html" class="menu-item" style="margin-top: auto; color: var(--error-color);">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="dashboard-header">
+            <div>
+                <h1>Medical History Form</h1>
+                <p class="text-muted">Complete your medical history record</p>
+            </div>
+            <div class="btn-toolbar">
+                <button id="btn-save" class="btn btn-primary"><i class="fas fa-save"></i> Save Changes</button>
+            </div>
+        </div>
+
+        <div id="toast-container" style="position: fixed; bottom: 24px; right: 24px; z-index: 1000;"></div>
+
+        <form id="medical-history-form">
+            <!-- Vaccination History -->
+            <div class="form-section">
+                <div class="section-header">Mother's Vaccination History</div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Vaccine</th>
+                                <th>Date Administered</th>
+                                <th>Next Due Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vaccination-table-body">
+                            <tr>
+                                <td>Flu</td>
+                                <td><input type="date" class="form-control" name="vaccine_flu_date"></td>
+                                <td><input type="date" class="form-control" name="vaccine_flu_next"></td>
+                            </tr>
+                            <tr>
+                                <td>Shingles</td>
+                                <td><input type="date" class="form-control" name="vaccine_shingles_date"></td>
+                                <td><input type="date" class="form-control" name="vaccine_shingles_next"></td>
+                            </tr>
+                            <tr>
+                                <td>Pneumococcal Vaccine</td>
+                                <td><input type="date" class="form-control" name="vaccine_pneumo_date"></td>
+                                <td><input type="date" class="form-control" name="vaccine_pneumo_next"></td>
+                            </tr>
+                            <tr>
+                                <td>COVID 19</td>
+                                <td><input type="date" class="form-control" name="vaccine_covid_date"></td>
+                                <td><input type="date" class="form-control" name="vaccine_covid_next"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Medical History -->
+            <div class="form-section">
+                <h2 style="text-align: center; color: var(--primary-color); margin-bottom: 24px;">MEDICAL HISTORY</h2>
+
+                <!-- Personal History -->
+                <div class="section-header">Mother's Personal Medical History (Check all that apply):</div>
+                <div class="checkbox-grid">
+                    <label class="checkbox-item"><input type="checkbox" name="ph_anxiety"> Anxiety</label>
+                    <label class="checkbox-item"><input type="checkbox" name="ph_arthritis"> Arthritis</label>
+                    <label class="checkbox-item"><input type="checkbox" name="ph_depression"> Depression</label>
+                    <label class="checkbox-item"><input type="checkbox" name="ph_migraine"> Migraine</label>
+                    <label class="checkbox-item"><input type="checkbox" name="ph_asthma"> Asthma</label>
+                    <label class="checkbox-item"><input type="checkbox" name="ph_diabetes"> Diabetes</label>
+                    <label class="checkbox-item"><input type="checkbox" name="ph_heart_disease"> Heart disease</label>
+                    <label class="checkbox-item"><input type="checkbox" name="ph_seizures"> Seizures</label>
+                    <label class="checkbox-item"><input type="checkbox" name="ph_high_bp"> High blood pressure</label>
+                    <label class="checkbox-item"><input type="checkbox" name="ph_none"> No known medical
+                        conditions</label>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <label class="checkbox-item"><input type="checkbox" name="ph_other_check"> Other:</label>
+                    <input type="text" class="input-line" name="ph_other_text">
+                </div>
+
+                <!-- Family History -->
+                <div class="section-header" style="margin-top: 24px;">Family Medical History (Check all that apply):
+                </div>
+                <p class="text-muted text-small" style="margin-bottom: 12px;">Is there any family history of the
+                    following? (Check all that apply)</p>
+                <div class="checkbox-grid">
+                    <label class="checkbox-item"><input type="checkbox" name="fh_cancer"> Cancer</label>
+                    <label class="checkbox-item"><input type="checkbox" name="fh_diabetes"> Diabetes</label>
+                    <label class="checkbox-item"><input type="checkbox" name="fh_heart_disease"> Heart disease</label>
+                    <label class="checkbox-item"><input type="checkbox" name="fh_stroke"> Stroke</label>
+                    <label class="checkbox-item"><input type="checkbox" name="fh_mental_health"> Mental health
+                        conditions</label>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <label class="checkbox-item"><input type="checkbox" name="fh_other_check"> Other:</label>
+                    <input type="text" class="input-line" name="fh_other_text">
+                </div>
+
+                <!-- Medications & Allergies -->
+                <div class="section-header" style="margin-top: 24px;">Please list any medications you are currently
+                    taking (Mother):</div>
+                <textarea class="form-control" name="mother_medications" rows="3"
+                    style="width: 100%; margin-bottom: 16px;"></textarea>
+
+                <div style="margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <label style="font-weight: 600; color: #1565C0;">Do you have any known allergies?</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="mother_allergies_exist" value="yes"> Yes</label>
+                            <label><input type="radio" name="mother_allergies_exist" value="no" checked> No</label>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span>If yes, list allergies:</span>
+                        <input type="text" class="input-line" name="mother_allergies_list">
+                    </div>
+                </div>
+
+                <div class="section-header">Please list any medications the child is currently taking:</div>
+                <textarea class="form-control" name="child_medications" rows="3"
+                    style="width: 100%; margin-bottom: 16px;"></textarea>
+
+                <div style="margin-bottom: 16px;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <label style="font-weight: 600; color: #1565C0;">Does he/she have any known allergies?</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="child_allergies_exist" value="yes"> Yes</label>
+                            <label><input type="radio" name="child_allergies_exist" value="no" checked> No</label>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span>If yes, list allergies:</span>
+                        <input type="text" class="input-line" name="child_allergies_list">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Checkup History -->
+            <div class="form-section">
+                <div class="section-header">Checkup History</div>
+                <div class="table-container">
+                    <table id="checkup-table">
+                        <thead>
+                            <tr>
+                                <th>Purpose</th>
+                                <th>Date</th>
+                                <th>Doctor's Name & Signature</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="text" class="form-control" name="checkup_purpose_1"></td>
+                                <td><input type="date" class="form-control" name="checkup_date_1"></td>
+                                <td><input type="text" class="form-control" name="checkup_doc_1"></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" class="form-control" name="checkup_purpose_2"></td>
+                                <td><input type="date" class="form-control" name="checkup_date_2"></td>
+                                <td><input type="text" class="form-control" name="checkup_doc_2"></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" class="form-control" name="checkup_purpose_3"></td>
+                                <td><input type="date" class="form-control" name="checkup_date_3"></td>
+                                <td><input type="text" class="form-control" name="checkup_doc_3"></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" class="form-control" name="checkup_purpose_4"></td>
+                                <td><input type="date" class="form-control" name="checkup_date_4"></td>
+                                <td><input type="text" class="form-control" name="checkup_doc_4"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </form>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/export-service.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const userId = localStorage.getItem('userId');
+            if (!userId) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Find mother data
+            const mother = window.mockData.mothers.find(m => m.id === userId);
+            if (mother) {
+                // Populate Print Header
+                const printHeader = document.createElement('div');
+                printHeader.className = 'print-only header-info';
+                printHeader.innerHTML = `
+                    <h1>Medical History Record</h1>
+                    <p><strong>Name:</strong> ${mother.name}</p>
+                    <p><strong>Contact:</strong> ${mother.contact}</p>
+                    <p><strong>Address:</strong> ${mother.address}</p>
+                    <p><strong>Date Generated:</strong> ${new Date().toLocaleDateString()}</p>
+                    <hr style="margin: 20px 0;">
+                `;
+                document.querySelector('.main-content').prepend(printHeader);
+            }
+
+            // Load existing data
+            loadMedicalHistory(userId);
+
+            // Save Handler
+            document.getElementById('btn-save').addEventListener('click', function () {
+                saveMedicalHistory(userId);
+            });
+
+
+        });
+
+        function loadMedicalHistory(userId) {
+            const history = window.mockData.motherMedicalHistory.find(h => h.motherId === userId);
+            if (!history) return;
+
+            // Load Vaccinations
+            if (history.vaccinations) {
+                const rows = document.querySelectorAll('#vaccination-table-body tr');
+                history.vaccinations.forEach((vac, index) => {
+                    if (rows[index]) {
+                        rows[index].querySelector('input[name$="_date"]').value = vac.dateAdministered;
+                        rows[index].querySelector('input[name$="_next"]').value = vac.nextDueDate;
+                    }
+                });
+            }
+
+            // Load Personal History
+            if (history.personalHistory) {
+                for (const [key, value] of Object.entries(history.personalHistory)) {
+                    const checkbox = document.querySelector(`input[name="ph_${key}"]`);
+                    if (checkbox) checkbox.checked = value;
+                    if (key === 'other') document.querySelector('input[name="ph_other_text"]').value = value;
+                }
+            }
+
+            // Load Family History
+            if (history.familyHistory) {
+                for (const [key, value] of Object.entries(history.familyHistory)) {
+                    const checkbox = document.querySelector(`input[name="fh_${key}"]`);
+                    if (checkbox) checkbox.checked = value;
+                    if (key === 'other') document.querySelector('input[name="fh_other_text"]').value = value;
+                }
+            }
+
+            // Load Medications & Allergies
+            document.querySelector('textarea[name="mother_medications"]').value = history.motherMedications || '';
+            document.querySelector('textarea[name="child_medications"]').value = history.childMedications || '';
+
+            if (history.motherAllergies) {
+                const radio = document.querySelector(`input[name="mother_allergies_exist"][value="${history.motherAllergies.hasAllergies ? 'yes' : 'no'}"]`);
+                if (radio) radio.checked = true;
+                document.querySelector('input[name="mother_allergies_list"]').value = history.motherAllergies.list || '';
+            }
+
+            if (history.childAllergies) {
+                const radio = document.querySelector(`input[name="child_allergies_exist"][value="${history.childAllergies.hasAllergies ? 'yes' : 'no'}"]`);
+                if (radio) radio.checked = true;
+                document.querySelector('input[name="child_allergies_list"]').value = history.childAllergies.list || '';
+            }
+
+            // Load Checkup History
+            if (history.checkupHistory) {
+                const rows = document.querySelectorAll('#checkup-table tbody tr');
+                history.checkupHistory.forEach((checkup, index) => {
+                    if (rows[index]) {
+                        rows[index].querySelector('input[name^="checkup_purpose"]').value = checkup.purpose;
+                        rows[index].querySelector('input[name^="checkup_date"]').value = checkup.date;
+                        rows[index].querySelector('input[name^="checkup_doc"]').value = checkup.doctorSignature;
+                    }
+                });
+            }
+        }
+
+        function saveMedicalHistory(userId, showAlert = true) {
+            // Collect Data
+            const form = document.getElementById('medical-history-form');
+            const data = {
+                motherId: userId,
+                vaccinations: [],
+                personalHistory: {},
+                familyHistory: {},
+                motherMedications: form.querySelector('textarea[name="mother_medications"]').value,
+                motherAllergies: {
+                    hasAllergies: form.querySelector('input[name="mother_allergies_exist"]:checked').value === 'yes',
+                    list: form.querySelector('input[name="mother_allergies_list"]').value
+                },
+                childMedications: form.querySelector('textarea[name="child_medications"]').value,
+                childAllergies: {
+                    hasAllergies: form.querySelector('input[name="child_allergies_exist"]:checked').value === 'yes',
+                    list: form.querySelector('input[name="child_allergies_list"]').value
+                },
+                checkupHistory: []
+            };
+
+            // Collect Vaccinations
+            const vacRows = document.querySelectorAll('#vaccination-table-body tr');
+            const vaccines = ['Flu', 'Shingles', 'Pneumococcal Vaccine', 'COVID 19'];
+            vacRows.forEach((row, index) => {
+                data.vaccinations.push({
+                    vaccine: vaccines[index],
+                    dateAdministered: row.querySelector('input[name$="_date"]').value,
+                    nextDueDate: row.querySelector('input[name$="_next"]').value
+                });
+            });
+
+            // Collect Personal History
+            const phCheckboxes = document.querySelectorAll('input[name^="ph_"]');
+            phCheckboxes.forEach(cb => {
+                if (cb.type === 'checkbox') {
+                    const key = cb.name.replace('ph_', '');
+                    data.personalHistory[key] = cb.checked;
+                }
+            });
+            data.personalHistory.other = form.querySelector('input[name="ph_other_text"]').value;
+
+            // Collect Family History
+            const fhCheckboxes = document.querySelectorAll('input[name^="fh_"]');
+            fhCheckboxes.forEach(cb => {
+                if (cb.type === 'checkbox') {
+                    const key = cb.name.replace('fh_', '');
+                    data.familyHistory[key] = cb.checked;
+                }
+            });
+            data.familyHistory.other = form.querySelector('input[name="fh_other_text"]').value;
+
+            // Collect Checkup History
+            const checkupRows = document.querySelectorAll('#checkup-table tbody tr');
+            checkupRows.forEach(row => {
+                const purpose = row.querySelector('input[name^="checkup_purpose"]').value;
+                if (purpose) { // Only save rows with data
+                    data.checkupHistory.push({
+                        purpose: purpose,
+                        date: row.querySelector('input[name^="checkup_date"]').value,
+                        doctorSignature: row.querySelector('input[name^="checkup_doc"]').value
+                    });
+                }
+            });
+
+            // Save to mockData and localStorage
+            if (!window.mockData.motherMedicalHistory) {
+                window.mockData.motherMedicalHistory = [];
+            }
+
+            const existingIndex = window.mockData.motherMedicalHistory.findIndex(h => h.motherId === userId);
+            if (existingIndex !== -1) {
+                window.mockData.motherMedicalHistory[existingIndex] = data;
+            } else {
+                window.mockData.motherMedicalHistory.push(data);
+            }
+
+            localStorage.setItem('cchisData', JSON.stringify(window.mockData));
+
+            if (showAlert) {
+                showToast('Medical history saved successfully!', 'success');
+            }
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.style.cssText = `
+                background: ${type === 'success' ? '#d4edda' : '#f8d7da'};
+                color: ${type === 'success' ? '#155724' : '#721c24'};
+                padding: 12px 24px;
+                border-radius: 8px;
+                margin-top: 10px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                animation: slideIn 0.3s ease-out;
+            `;
+            toast.innerHTML = `
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+                <span>${message}</span>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease-in forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Add keyframes for toast animation
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+
+</html>
