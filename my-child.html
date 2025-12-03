@@ -33,11 +33,8 @@
             <a href="my-appointments.html" class="menu-item">
                 <i class="fas fa-calendar-alt"></i> My Appointments
             </a>
-            <a href="medical-history.html" class="menu-item">
-                <i class="fas fa-file-medical"></i> Medical History
-            </a>
             <a href="my-records.html" class="menu-item">
-                <i class="fas fa-folder-open"></i> Medical Records
+                <i class="fas fa-file-medical"></i> Medical Records
             </a>
             <a href="#" class="menu-item">
                 <i class="fas fa-book-medical"></i> Health Resources
@@ -130,21 +127,14 @@
             </div>
         </div>
 
-        <!-- Growth Charts -->
-        <div class="grid-container" style="margin-bottom: 24px;">
-            <div class="card">
-                <h3>Weight Chart</h3>
-                <p class="text-muted text-small">Tracking baby's weight development vs. WHO standards</p>
-                <div style="height: 300px; position: relative;">
-                    <canvas id="weightChart"></canvas>
-                </div>
-            </div>
-            <div class="card">
-                <h3>Height Chart</h3>
-                <p class="text-muted text-small">Tracking baby's length/height development vs. WHO standards</p>
-                <div style="height: 300px; position: relative;">
-                    <canvas id="heightChart"></canvas>
-                </div>
+        <div class="grid-container">
+            <!-- Left Column: Growth & Milestones -->
+            <div class="left-column">
+                <!-- Growth Chart Placeholder -->
+                <path d="M0,100 C20,80 50,60 100,40" stroke="#E0E0E0" stroke-width="2" fill="none" />
+                <path d="M0,100 C20,70 50,50 100,20" stroke="#E0E0E0" stroke-width="2" fill="none" />
+                <path d="M0,100 C20,75 50,55 100,30" stroke="#4ECDC4" stroke-width="3" fill="none" />
+                </svg>
             </div>
         </div>
 
@@ -222,12 +212,11 @@
     <script src="js/data.js"></script>
     <script src="js/script.js"></script>
     <script>
-        // Global variables for edit mode and current child data
-        let isEditMode = false;
-        let currentChild = null;
-
         document.addEventListener('DOMContentLoaded', function () {
-            // Set up event listeners
+            // Edit Mode Functionality
+            let isEditMode = false;
+            let currentChild = null;
+
             document.getElementById('btn-edit-child').addEventListener('click', function () {
                 isEditMode = true;
                 toggleEditMode(true);
@@ -241,52 +230,56 @@
             });
 
             document.getElementById('btn-save-child').addEventListener('click', function () {
-                if (!currentChild) {
-                    alert('No child data loaded. Please refresh the page.');
-                    return;
-                }
+                if (!currentChild) return;
 
                 // Get updated values
-                const newName = document.getElementById('child-name-edit').value.trim();
-                const newBirthDate = document.getElementById('child-dob-edit').value;
-                const newSex = document.getElementById('child-sex-edit').value;
-                const newWeight = parseFloat(document.getElementById('child-weight-edit').value);
-                const newHeight = parseFloat(document.getElementById('child-height-edit').value);
-                const newBloodType = document.getElementById('child-blood-edit').value;
-
-                // Validate inputs
-                if (!newName) {
-                    alert('Please enter a name for the baby.');
-                    return;
-                }
-                if (!newBirthDate) {
-                    alert('Please enter a birth date.');
-                    return;
-                }
-
-                // Update currentChild object
-                currentChild.name = newName;
-                currentChild.birthDate = newBirthDate;
-                currentChild.sex = newSex;
-                currentChild.currentWeight = newWeight || currentChild.birthWeight;
-                currentChild.currentHeight = newHeight || currentChild.birthLength;
-                currentChild.bloodType = newBloodType;
+                currentChild.name = document.getElementById('child-name-edit').value;
+                currentChild.birthDate = document.getElementById('child-dob-edit').value;
+                currentChild.sex = document.getElementById('child-sex-edit').value;
+                currentChild.currentWeight = parseFloat(document.getElementById('child-weight-edit').value) || currentChild.birthWeight;
+                currentChild.currentHeight = parseFloat(document.getElementById('child-height-edit').value) || currentChild.birthLength;
+                currentChild.bloodType = document.getElementById('child-blood-edit').value;
 
                 // Update in mockData
                 const childIndex = window.mockData.children.findIndex(c => c.id === currentChild.id);
                 if (childIndex !== -1) {
-                    window.mockData.children[childIndex] = { ...currentChild };
+                    window.mockData.children[childIndex] = currentChild;
                     localStorage.setItem('cchisData', JSON.stringify(window.mockData));
 
                     alert('Child profile updated successfully!');
                     isEditMode = false;
                     toggleEditMode(false);
-                    loadChildData(); // This will reload all data including charts
-                } else {
-                    alert('Error: Could not find child in database.');
+                    loadChildData();
                 }
             });
+            isEditMode = false;
+            toggleEditMode(false);
+            // Reload original data
             loadChildData();
+        });
+
+        document.getElementById('btn-save-child').addEventListener('click', function () {
+            if (!currentChild) return;
+
+            // Get updated values
+            currentChild.name = document.getElementById('child-name-edit').value;
+            currentChild.birthDate = document.getElementById('child-dob-edit').value;
+            currentChild.sex = document.getElementById('child-sex-edit').value;
+            currentChild.currentWeight = parseFloat(document.getElementById('child-weight-edit').value) || currentChild.birthWeight;
+            currentChild.currentHeight = parseFloat(document.getElementById('child-height-edit').value) || currentChild.birthLength;
+            currentChild.bloodType = document.getElementById('child-blood-edit').value;
+
+            // Update in mockData
+            const childIndex = window.mockData.children.findIndex(c => c.id === currentChild.id);
+            if (childIndex !== -1) {
+                window.mockData.children[childIndex] = currentChild;
+                localStorage.setItem('cchisData', JSON.stringify(window.mockData));
+
+                alert('Child profile updated successfully!');
+                isEditMode = false;
+                toggleEditMode(false);
+                loadChildData();
+            }
         });
 
         function toggleEditMode(edit) {
@@ -383,189 +376,6 @@
 
             // Render Milestones
             renderMilestones(child.id);
-
-            // Render Growth Charts
-            renderGrowthCharts(child);
-        }
-
-        function renderGrowthCharts(child) {
-            if (!child) return;
-
-            // Calculate baby's age in months
-            const birthDate = new Date(child.birthDate);
-            const now = new Date();
-            const ageInMonths = Math.floor((now - birthDate) / (1000 * 60 * 60 * 24 * 30.44));
-
-            // Generate month labels based on age
-            const maxMonths = Math.max(ageInMonths + 2, 12);
-            const monthLabels = Array.from({ length: maxMonths + 1 }, (_, i) => i.toString());
-
-            // WHO Weight Standards (50th percentile) for boys - kg
-            const whoWeightBoys = [3.3, 4.5, 5.6, 6.4, 7.0, 7.5, 7.9, 8.3, 8.6, 8.9, 9.2, 9.4, 9.6];
-            // WHO Weight Standards (50th percentile) for girls - kg
-            const whoWeightGirls = [3.2, 4.2, 5.1, 5.8, 6.4, 6.9, 7.3, 7.6, 7.9, 8.2, 8.5, 8.7, 8.9];
-
-            // WHO Height Standards (50th percentile) for boys - cm
-            const whoHeightBoys = [49.9, 54.7, 58.4, 61.4, 63.9, 65.9, 67.6, 69.2, 70.6, 72.0, 73.3, 74.5, 75.7];
-            // WHO Height Standards (50th percentile) for girls - cm
-            const whoHeightGirls = [49.1, 53.7, 57.1, 59.8, 62.1, 64.0, 65.7, 67.3, 68.7, 70.1, 71.5, 72.8, 74.0];
-
-            // Select WHO data based on child's sex
-            const isBoy = child.sex === 'Male';
-            const whoWeight = isBoy ? whoWeightBoys : whoWeightGirls;
-            const whoHeight = isBoy ? whoHeightBoys : whoHeightGirls;
-
-            // Extend WHO data to match chart length
-            while (whoWeight.length < maxMonths + 1) {
-                const lastWeight = whoWeight[whoWeight.length - 1];
-                whoWeight.push(lastWeight + 0.2); // Approximate growth
-            }
-            while (whoHeight.length < maxMonths + 1) {
-                const lastHeight = whoHeight[whoHeight.length - 1];
-                whoHeight.push(lastHeight + 1.0); // Approximate growth
-            }
-
-            // Child's weight data points
-            const childWeightData = monthLabels.map((month, index) => {
-                if (index === 0) return child.birthWeight || null;
-                if (index === ageInMonths) return child.currentWeight || child.birthWeight || null;
-                return null;
-            });
-
-            // Child's height data points
-            const childHeightData = monthLabels.map((month, index) => {
-                if (index === 0) return child.birthLength || null;
-                if (index === ageInMonths) return child.currentHeight || child.birthLength || null;
-                return null;
-            });
-
-            // Destroy existing charts if they exist
-            if (window.childWeightChart) window.childWeightChart.destroy();
-            if (window.childHeightChart) window.childHeightChart.destroy();
-
-            // Weight Chart
-            const ctxWeight = document.getElementById('weightChart');
-            if (ctxWeight) {
-                window.childWeightChart = new Chart(ctxWeight.getContext('2d'), {
-                    type: 'line',
-                    data: {
-                        labels: monthLabels,
-                        datasets: [
-                            {
-                                label: `${child.name}'s Weight`,
-                                data: childWeightData,
-                                borderColor: '#667eea',
-                                backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                                tension: 0.4,
-                                fill: false,
-                                borderWidth: 3,
-                                pointRadius: 5,
-                                pointBackgroundColor: '#667eea'
-                            },
-                            {
-                                label: 'WHO 50th Percentile',
-                                data: whoWeight.slice(0, maxMonths + 1),
-                                borderColor: '#ccc',
-                                borderDash: [5, 5],
-                                borderWidth: 2,
-                                pointRadius: 0,
-                                fill: false
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: true,
-                                position: 'top'
-                            },
-                            tooltip: {
-                                mode: 'index',
-                                intersect: false
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                title: {
-                                    display: true,
-                                    text: 'Weight (kg)'
-                                }
-                            },
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: 'Age (months)'
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-
-            // Height Chart
-            const ctxHeight = document.getElementById('heightChart');
-            if (ctxHeight) {
-                window.childHeightChart = new Chart(ctxHeight.getContext('2d'), {
-                    type: 'line',
-                    data: {
-                        labels: monthLabels,
-                        datasets: [
-                            {
-                                label: `${child.name}'s Height`,
-                                data: childHeightData,
-                                borderColor: '#28a745',
-                                backgroundColor: 'rgba(40, 167, 69, 0.1)',
-                                tension: 0.4,
-                                fill: false,
-                                borderWidth: 3,
-                                pointRadius: 5,
-                                pointBackgroundColor: '#28a745'
-                            },
-                            {
-                                label: 'WHO 50th Percentile',
-                                data: whoHeight.slice(0, maxMonths + 1),
-                                borderColor: '#ccc',
-                                borderDash: [5, 5],
-                                borderWidth: 2,
-                                pointRadius: 0,
-                                fill: false
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: true,
-                                position: 'top'
-                            },
-                            tooltip: {
-                                mode: 'index',
-                                intersect: false
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                title: {
-                                    display: true,
-                                    text: 'Length/Height (cm)'
-                                }
-                            },
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: 'Age (months)'
-                                }
-                            }
-                        }
-                    }
-                });
-            }
         }
 
         function renderMilestones(childId) {

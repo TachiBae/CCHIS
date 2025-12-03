@@ -73,7 +73,12 @@
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
             <h1>Reports & Analytics</h1>
             <div style="display: flex; gap: 12px;">
-                <input type="date" class="form-control" style="width: auto;">
+                <select class="form-control" style="width: auto;" id="report-period-select">
+                    <option value="quarterly">Quarterly</option>
+                    <option value="semi-annually">Semi-Annually</option>
+                    <option value="annually">Annually</option>
+                    <option value="lifetime">Lifetime</option>
+                </select>
                 <button class="btn btn-secondary" id="download-report">
                     <i class="fas fa-download"></i> Download PDF
                 </button>

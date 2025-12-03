@@ -1,6 +1,8 @@
 /* Doctor's View Theme - CCHIS */
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
 }
 
@@ -51,12 +53,17 @@
     --topbar-height: 60px;
 }
 
+html {
+    min-height: 100vh;
+}
+
 body {
     background-color: var(--background-color);
     color: var(--text-primary);
     font-family: 'Segoe UI', system-ui, sans-serif;
     line-height: 1.5;
     font-size: 14px;
+    min-height: 100vh;
 }
 
 /* Typography */
@@ -228,7 +235,6 @@ h3 {
     margin-top: var(--topbar-height);
     padding: var(--spacing-lg);
     width: calc(100% - var(--sidebar-width));
-    max-width: 1400px;
 }
 
 /* Cards */

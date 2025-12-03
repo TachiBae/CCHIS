@@ -69,6 +69,17 @@ document.addEventListener('DOMContentLoaded', function () {
         renderAttentionPanel();
     }
 
+    // Page Initializations
+    if (currentPage === 'profiles.html') {
+        initProfilesPage();
+    } else if (currentPage === 'growth.html') {
+        initGrowthPage();
+    } else if (currentPage === 'postpartum.html') {
+        initPostpartumPage();
+    } else if (currentPage === 'reports.html') {
+        initReportsPage();
+    }
+
     // Access Control Check
     checkAccess();
 
@@ -344,11 +355,12 @@ function renderProfilesList(mothers) {
         const child = window.mockData.children.find(c => c.id === mother.childId);
         const tr = document.createElement('tr');
         tr.innerHTML = `
+            <td><span class="badge ${getStatusBadgeClass(mother.status)}">${mother.status}</span></td>
             <td><span style="cursor: pointer;" onclick="openMotherModal('${mother.id}')">${mother.name}</span></td>
             <td>${child ? `<span style="cursor: pointer;" onclick="openChildModal('${child.id}')">${child.name}</span>` : 'N/A'}</td>
             <td>${formatDate(mother.deliveryDate) || 'Pregnant'}</td>
-            <td><span class="badge ${getStatusBadgeClass(mother.status)}">${mother.status}</span></td>
-            <td>
+            <td>${mother.riskFactors && mother.riskFactors.length > 0 ? mother.riskFactors.map(r => `<span class="badge bg-warning" style="margin-right: 4px;">${r}</span>`).join('') : '<span class="text-muted">None</span>'}</td>
+            <td style="text-align: right;">
                 <button class="btn btn-outline btn-sm" onclick="openMotherModal('${mother.id}')">View</button>
             </td>
         `;
@@ -698,10 +710,10 @@ function updateGrowthPage(childId) {
         const allAssignedChildren = window.mockData.children.filter(c => assignedMotherIds.includes(c.motherId));
 
         if (allAssignedChildren.length <= 1) {
-            selector.parentElement.style.display = 'none'; // Hide if no siblings
+            selector.parentElement.style.display = 'none'; // Hide if only one child
         } else {
             selector.parentElement.style.display = 'block';
-            selector.innerHTML = siblings.map(s => `
+            selector.innerHTML = allAssignedChildren.map(s => `
                 <option value="${s.id}" ${s.id === childId ? 'selected' : ''}>
                     ${s.name} (${formatDate(s.birthDate)})
                 </option>
@@ -1597,4 +1609,115 @@ function initMyRecords() {
 function setText(id, text) {
     const el = document.getElementById(id);
     if (el) el.textContent = text;
+}
+
+// Reports Page Logic
+function initReportsPage() {
+    const periodSelect = document.getElementById('report-period-select');
+    if (periodSelect) {
+        periodSelect.addEventListener('change', (e) => {
+            updateReports(e.target.value);
+        });
+    }
+
+    // Initial Render (Quarterly)
+    updateReports('quarterly');
+}
+
+function updateReports(period) {
+    // Mock Data based on period
+    let labels, deliveriesData, visitsData, immData, riskData;
+
+    if (period === 'quarterly') {
+        labels = ['Jan', 'Feb', 'Mar'];
+        deliveriesData = [12, 15, 10];
+        visitsData = [95, 92, 98];
+        immData = [85, 88, 90];
+        riskData = [5, 10, 85]; // High, At Risk, Normal
+    } else if (period === 'semi-annually') {
+        labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+        deliveriesData = [12, 15, 10, 18, 20, 14];
+        visitsData = [95, 92, 98, 94, 96, 95];
+        immData = [85, 88, 90, 92, 91, 89];
+        riskData = [8, 15, 77];
+    } else if (period === 'annually') {
+        labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        deliveriesData = [12, 15, 10, 18, 20, 14, 16, 19, 22, 18, 15, 12];
+        visitsData = [95, 92, 98, 94, 96, 95, 93, 97, 95, 96, 94, 95];
+        immData = [85, 88, 90, 92, 91, 89, 93, 94, 92, 90, 91, 93];
+        riskData = [12, 20, 68];
+    } else { // Lifetime
+        labels = ['2021', '2022', '2023', '2024'];
+        deliveriesData = [150, 180, 200, 124];
+        visitsData = [90, 92, 94, 95];
+        immData = [80, 85, 87, 88];
+        riskData = [15, 25, 60];
+    }
+
+    // Destroy existing charts
+    if (window.deliveriesChart instanceof Chart) window.deliveriesChart.destroy();
+    if (window.visitsChart instanceof Chart) window.visitsChart.destroy();
+    if (window.immCoverageChart instanceof Chart) window.immCoverageChart.destroy();
+    if (window.riskChart instanceof Chart) window.riskChart.destroy();
+
+    // Deliveries Chart
+    const ctxDel = document.getElementById('deliveriesChart').getContext('2d');
+    window.deliveriesChart = new Chart(ctxDel, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Deliveries',
+                data: deliveriesData,
+                backgroundColor: '#667eea'
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    // Visits Chart
+    const ctxVis = document.getElementById('visitsChart').getContext('2d');
+    window.visitsChart = new Chart(ctxVis, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Completion Rate (%)',
+                data: visitsData,
+                borderColor: '#00b894',
+                tension: 0.4
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100 } } }
+    });
+
+    // Immunization Chart
+    const ctxImm = document.getElementById('immCoverageChart').getContext('2d');
+    window.immCoverageChart = new Chart(ctxImm, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Coverage (%)',
+                data: immData,
+                borderColor: '#fdcb6e',
+                tension: 0.4
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100 } } }
+    });
+
+    // Risk Chart
+    const ctxRisk = document.getElementById('riskChart').getContext('2d');
+    window.riskChart = new Chart(ctxRisk, {
+        type: 'doughnut',
+        data: {
+            labels: ['High Risk', 'At Risk', 'Normal'],
+            datasets: [{
+                data: riskData,
+                backgroundColor: ['#d63031', '#fdcb6e', '#00b894']
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
 }
