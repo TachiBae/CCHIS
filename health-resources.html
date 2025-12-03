@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Resources - CCHIS</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/mother-theme.css">
+    <style>
+        /* Additional styles for infographics */
+        .infographic-section {
+            margin-bottom: 48px;
+        }
+
+        .infographic-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .infographic-header h2 {
+            font-size: 28px;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+
+        .infographic-header p {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        /* Postpartum Check-up Guide Styles */
+        .checkup-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .checkup-card {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 32px 24px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-fast);
+            border: 2px solid transparent;
+        }
+
+        .checkup-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary-color);
+        }
+
+        .checkup-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            position: relative;
+        }
+
+        .checkup-timing {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .checkup-description {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .checkup-importance {
+            margin-top: 16px;
+            padding: 12px;
+            background: var(--background-color);
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Growth Chart Styles */
+        .growth-chart-container {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 32px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .growth-zones {
+            display: grid;
+            gap: 20px;
+            margin: 32px 0;
+        }
+
+        .zone-card {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            border-radius: var(--radius-sm);
+            border-left: 6px solid;
+        }
+
+        .zone-normal {
+            background: #E8F5E9;
+            border-color: #66BB6A;
+        }
+
+        .zone-risk {
+            background: #FFF3E0;
+            border-color: #FFA726;
+        }
+
+        .zone-danger {
+            background: #FFEBEE;
+            border-color: #EF5350;
+        }
+
+        .zone-icon {
+            font-size: 40px;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .zone-content h4 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .zone-bilingual {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .zone-description {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .food-item {
+            background: var(--background-color);
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            text-align: center;
+            transition: all var(--transition-fast);
+        }
+
+        .food-item:hover {
+            background: white;
+            box-shadow: var(--shadow-sm);
+            transform: translateY(-2px);
+        }
+
+        .food-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .food-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .food-name-filipino {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        /* Mental Health Styles */
+        .mental-health-container {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 32px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .emotions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin: 24px 0;
+        }
+
+        .emotion-card {
+            padding: 20px;
+            background: linear-gradient(135deg, #E3F2FD 0%, #F8F9FA 100%);
+            border-radius: var(--radius-sm);
+            border: 2px solid #E3F2FD;
+        }
+
+        .emotion-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .emotion-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .emotion-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .support-section {
+            margin-top: 32px;
+            padding: 24px;
+            background: var(--background-color);
+            border-radius: var(--radius-md);
+        }
+
+        .support-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .support-card {
+            background: white;
+            padding: 20px;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--primary-color);
+        }
+
+        .support-card h4 {
+            color: var(--primary-color);
+            font-size: 18px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .support-info {
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .support-info strong {
+            color: var(--text-primary);
+        }
+
+        .alert-box {
+            background: linear-gradient(135deg, #FFF3E0 0%, #FFECB3 100%);
+            padding: 20px;
+            border-radius: var(--radius-sm);
+            border-left: 4px solid var(--warning-color);
+            margin: 24px 0;
+        }
+
+        .alert-box h4 {
+            color: #E65100;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-brand"><i class="fas fa-heartbeat"></i> CCHIS</div>
+        </div>
+        <div class="sidebar-menu">
+            <a href="mother-dashboard.html" class="menu-item">
+                <i class="fas fa-home"></i> My Dashboard
+            </a>
+            <a href="my-profile.html" class="menu-item">
+                <i class="fas fa-user"></i> My Profile
+            </a>
+            <a href="my-child.html" class="menu-item">
+                <i class="fas fa-baby"></i> My Child
+            </a>
+            <a href="my-appointments.html" class="menu-item">
+                <i class="fas fa-calendar-alt"></i> My Appointments
+            </a>
+            <a href="medical-history.html" class="menu-item">
+                <i class="fas fa-file-medical"></i> Medical History
+            </a>
+            <a href="my-records.html" class="menu-item">
+                <i class="fas fa-folder-open"></i> Medical Records
+            </a>
+            <a href="health-resources.html" class="menu-item active">
+                <i class="fas fa-book-medical"></i> Health Resources
+            </a>
+            <a href="contact-worker.html" class="menu-item">
+                <i class="fas fa-comment-medical"></i> Contact Health Worker
+            </a>
+            <a href="index.html" class="menu-item" style="margin-top: auto; color: var(--error-color);">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header Section -->
+        <div class="dashboard-header">
+            <div>
+                <h1>📚 Health Resources</h1>
+                <p class="text-muted" style="font-size: 16px;">Educational guides for your maternal and child health
+                    journey</p>
+            </div>
+        </div>
+
+        <!-- Infographic 1: Postpartum Check-up Guide -->
+        <section class="infographic-section">
+            <div class="infographic-header">
+                <h2>🗓️ Postpartum Check-up Guide</h2>
+                <p>Three essential check-ups to ensure your health and recovery after delivery</p>
+            </div>
+
+            <div class="checkup-grid">
+                <!-- 48 Hours Check-up -->
+                <div class="checkup-card">
+                    <div class="checkup-icon" style="background: #E3F2FD; color: #1565C0;">
+                        <i class="fas fa-calendar-day"></i>
+                    </div>
+                    <div class="checkup-timing">48 Hours</div>
+                    <div class="checkup-description">
+                        Within 2 days after delivery
+                    </div>
+                    <div class="checkup-importance">
+                        <i class="fas fa-check-circle" style="color: #1565C0;"></i> Why it's important:
+                        <div style="margin-top: 8px; text-align: left;">
+                            • Monitor bleeding and check for infections<br>
+                            • Assess wound healing (if CS or episiotomy)<br>
+                            • Check breastfeeding progress<br>
+                            • Monitor baby's health and feeding
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7 Days Check-up -->
+                <div class="checkup-card">
+                    <div class="checkup-icon" style="background: #E8F5E9; color: #2E7D32;">
+                        <i class="fas fa-calendar-week"></i>
+                    </div>
+                    <div class="checkup-timing">7 Days</div>
+                    <div class="checkup-description">
+                        One week after delivery
+                    </div>
+                    <div class="checkup-importance">
+                        <i class="fas fa-check-circle" style="color: #2E7D32;"></i> Why it's important:
+                        <div style="margin-top: 8px; text-align: left;">
+                            • Continue monitoring of healing<br>
+                            • Check for signs of postpartum complications<br>
+                            • Address breastfeeding concerns<br>
+                            • Assess emotional well-being
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6 Weeks Check-up -->
+                <div class="checkup-card">
+                    <div class="checkup-icon" style="background: #F3E5F5; color: #7B1FA2;">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="checkup-timing">6 Weeks</div>
+                    <div class="checkup-description">
+                        Six weeks postpartum
+                    </div>
+                    <div class="checkup-importance">
+                        <i class="fas fa-check-circle" style="color: #7B1FA2;"></i> Why it's important:
+                        <div style="margin-top: 8px; text-align: left;">
+                            • Comprehensive physical examination<br>
+                            • Discuss family planning options<br>
+                            • Screen for postpartum depression<br>
+                            • Ensure complete recovery
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Infographic 2: Child Growth Chart Guide -->
+        <section class="infographic-section">
+            <div class="infographic-header">
+                <h2>📊 Child Growth Chart Guide</h2>
+                <p>Understanding your child's growth zones and nutritious foods to support healthy development</p>
+            </div>
+
+            <div class="growth-chart-container">
+                <h3 style="margin-bottom: 8px;">Growth Zones / Mga Zona ng Paglaki</h3>
+                <p class="text-muted" style="margin-bottom: 24px;">Regular monitoring helps ensure your child is growing
+                    well</p>
+
+                <div class="growth-zones">
+                    <!-- Normal Zone -->
+                    <div class="zone-card zone-normal">
+                        <div class="zone-icon">🟢</div>
+                        <div class="zone-content">
+                            <h4>Normal / Sakto</h4>
+                            <p class="zone-bilingual">Green Zone - Healthy Growth</p>
+                            <p class="zone-description">
+                                Your child is growing well! Weight and height are appropriate for their age. Continue
+                                with regular check-ups and balanced nutrition.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- At Risk Zone -->
+                    <div class="zone-card zone-risk">
+                        <div class="zone-icon">🟡</div>
+                        <div class="zone-content">
+                            <h4>At Risk / Nanganganib</h4>
+                            <p class="zone-bilingual">Yellow Zone - Needs Monitoring</p>
+                            <p class="zone-description">
+                                Your child's growth needs closer monitoring. Increase nutritious food intake and
+                                schedule more frequent check-ups with your health worker.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Underweight/Stunted Zone -->
+                    <div class="zone-card zone-danger">
+                        <div class="zone-icon">🔴</div>
+                        <div class="zone-content">
+                            <h4>Underweight/Stunted / Kulang sa Timbang o Humpay sa Paglaki</h4>
+                            <p class="zone-bilingual">Red Zone - Immediate Action Needed</p>
+                            <p class="zone-description">
+                                Urgent consultation required. Your health worker will provide a feeding plan and may
+                                recommend supplementation to help your child catch up.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 40px;">
+                    <h3 style="margin-bottom: 8px;">Locally Available Nutritious Foods</h3>
+                    <p class="text-muted" style="margin-bottom: 20px;">Mga Pagkaing Masustansya na Madaling Makuha</p>
+
+                    <div class="food-grid">
+                        <div class="food-item">
+                            <div class="food-icon">🫘</div>
+                            <div class="food-name">Mung Beans</div>
+                            <div class="food-name-filipino">Monggo</div>
+                        </div>
+                        <div class="food-item">
+                            <div class="food-icon">🌿</div>
+                            <div class="food-name">Moringa</div>
+                            <div class="food-name-filipino">Malunggay</div>
+                        </div>
+                        <div class="food-item">
+                            <div class="food-icon">🍌</div>
+                            <div class="food-name">Banana</div>
+                            <div class="food-name-filipino">Saging</div>
+                        </div>
+                        <div class="food-item">
+                            <div class="food-icon">🥚</div>
+                            <div class="food-name">Eggs</div>
+                            <div class="food-name-filipino">Itlog</div>
+                        </div>
+                        <div class="food-item">
+                            <div class="food-icon">🐟</div>
+                            <div class="food-name">Fish</div>
+                            <div class="food-name-filipino">Isda</div>
+                        </div>
+                        <div class="food-item">
+                            <div class="food-icon">🥬</div>
+                            <div class="food-name">Leafy Greens</div>
+                            <div class="food-name-filipino">Gulay</div>
+                        </div>
+                        <div class="food-item">
+                            <div class="food-icon">🍠</div>
+                            <div class="food-name">Sweet Potato</div>
+                            <div class="food-name-filipino">Kamote</div>
+                        </div>
+                        <div class="food-item">
+                            <div class="food-icon">🥛</div>
+                            <div class="food-name">Milk</div>
+                            <div class="food-name-filipino">Gatas</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Infographic 3: Mental Health Support -->
+        <section class="infographic-section">
+            <div class="infographic-header">
+                <h2>💚 Postpartum Mental Health Support</h2>
+                <p>It's normal to experience emotional changes - you're not alone</p>
+            </div>
+
+            <div class="mental-health-container">
+                <h3 style="margin-bottom: 8px;">Common Postpartum Emotional Changes</h3>
+                <p class="text-muted" style="margin-bottom: 20px;">These feelings are normal and experienced by many new
+                    mothers</p>
+
+                <div class="emotions-grid">
+                    <div class="emotion-card">
+                        <div class="emotion-icon">😢</div>
+                        <div class="emotion-title">Baby Blues</div>
+                        <div class="emotion-description">
+                            Mood swings, crying spells, and anxiety. Usually appears 2-3 days after birth and lasts up
+                            to 2 weeks. This is very common and normal.
+                        </div>
+                    </div>
+
+                    <div class="emotion-card">
+                        <div class="emotion-icon">😰</div>
+                        <div class="emotion-title">Anxiety & Worry</div>
+                        <div class="emotion-description">
+                            Excessive worry about baby's health, feeding, or your ability to care for them. Common in
+                            new mothers adjusting to their role.
+                        </div>
+                    </div>
+
+                    <div class="emotion-card">
+                        <div class="emotion-icon">😴</div>
+                        <div class="emotion-title">Exhaustion</div>
+                        <div class="emotion-description">
+                            Physical and emotional fatigue from caring for your newborn, lack of sleep, and recovery
+                            from childbirth.
+                        </div>
+                    </div>
+
+                    <div class="emotion-card">
+                        <div class="emotion-icon">🎭</div>
+                        <div class="emotion-title">Mood Changes</div>
+                        <div class="emotion-description">
+                            Feeling happy one moment and overwhelmed the next. These fluctuations are caused by hormonal
+                            changes after delivery.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert-box">
+                    <h4><i class="fas fa-exclamation-triangle"></i> When to Seek Help</h4>
+                    <p style="color: var(--text-primary); font-size: 14px; line-height: 1.6;">
+                        If feelings of sadness, anxiety, or hopelessness persist beyond 2 weeks, worsen over time, or
+                        interfere with caring for yourself or your baby, please reach out for professional support.
+                        Postpartum depression is treatable, and help is available.
+                    </p>
+                </div>
+
+                <div class="support-section">
+                    <h3 style="margin-bottom: 16px;">Where to Get Help / Saan Makakahingi ng Tulong</h3>
+
+                    <div class="support-grid">
+                        <div class="support-card">
+                            <h4><i class="fas fa-user-md"></i> Barangay Health Worker</h4>
+                            <div class="support-info">
+                                <strong>Your first point of contact</strong><br>
+                                Visit your local Barangay Health Station for initial consultation and support. They can
+                                provide counseling and refer you to specialized care if needed.
+                            </div>
+                        </div>
+
+                        <div class="support-card">
+                            <h4><i class="fas fa-hospital"></i> Rural Health Unit (RHU)</h4>
+                            <div class="support-info">
+                                <strong>Professional medical support</strong><br>
+                                Schedule an appointment with a doctor or midwife at your nearest RHU. They can assess
+                                your condition and provide treatment or referrals.
+                            </div>
+                        </div>
+
+                        <div class="support-card">
+                            <h4><i class="fas fa-phone-alt"></i> Crisis Hotlines</h4>
+                            <div class="support-info">
+                                <strong>24/7 Support</strong><br>
+                                <strong>NCMH Crisis Hotline:</strong> 0917-899-USAP (8727)<br>
+                                <strong>In-Touch Community:</strong> (02) 8893-7603<br>
+                                Free, confidential support anytime.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        style="margin-top: 24px; padding: 20px; background: linear-gradient(135deg, #E3F2FD 0%, #F8F9FA 100%); border-radius: var(--radius-sm); border: 2px solid var(--primary-color);">
+                        <h4 style="color: var(--primary-color); margin-bottom: 12px;">
+                            <i class="fas fa-heart"></i> Remember: Taking Care of Yourself is Taking Care of Your Baby
+                        </h4>
+                        <p style="font-size: 14px; color: var(--text-primary); line-height: 1.6; margin: 0;">
+                            Your mental health is just as important as your physical health. Don't hesitate to reach out
+                            for support - asking for help is a sign of strength, not weakness. You deserve to feel well
+                            and enjoy this special time with your baby.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
+</body>
+
+</html>
